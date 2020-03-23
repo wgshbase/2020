@@ -1,0 +1,61 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://www.vientianetimes.org.la/Region_world/Reworld_Index.php"],
+  "domain": "www.vientianetimes.org.la",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//p/strong/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"VIENTIANETIMES",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.vientianetimes.org.la/Region_world/Reworld_Index.php?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//td[@width='682']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p/strong",
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src | //img/@src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//p/strong/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//font[@face='Arial, Helvetica, sans-serif']/text()",
+          
+        }
+      ]
+    }
+  }
+}

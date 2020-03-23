@@ -1,0 +1,63 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://terra.oregonstate.edu/category/healthies/healthy-planet/"],
+  "domain": "terra.oregonstate.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//a[@class='coverlink']/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"OREGON STATE UNIVERSITY",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "http://terra.oregonstate.edu/category/healthies/healthy-planet/page/${page}/"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='pf-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//div[@class='wp-block-image']",
+               			"//img"
+               			]
+          },
+          "innerFileConfigs": [
+          {
+            "resourceName": "image",
+            "resourceRegionExp": "//img/@src",
+            "multi": true,
+          }
+        ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='container']/div/h2/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@property='article:published_time']/@content",
+
+        }
+      ]
+    }
+  }
+}

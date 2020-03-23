@@ -1,0 +1,63 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://www.zaobao.com/realtime/world"],
+  "domain": "www.zaobao.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='post-list view-content']/div/div/a/@href",
+  "newsCategory":"中文新闻",
+  "sslm":"A03",
+  "src":"联合早报",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 0,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.zaobao.com/realtime/world?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='body-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//aside",
+               			"//h1",
+               			"//section[@id='imu']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//source/@srcset",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='body-content']/h1/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='datestamp date-published meta-date-published']/text()",
+          
+        }
+      ]
+    }
+  }
+}

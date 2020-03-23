@@ -1,0 +1,68 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.sipri.org/news/past"],
+  "domain": "www.sipri.org",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='field-content']/h3/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"SIPRI",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.sipri.org/news/past?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='field-post-date field--label-hidden']",
+               			"//iframe",
+               			"//div[@class='field-event-contact-staff- clearfix field--label-inline']",
+               			"//div[@class='field-related-files field--label-above']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src | //img/@src",
+              "multi": true,
+            },
+            {
+              "resourceName": "pdf",
+              "resourceRegionExp": "//a[contains(@href,'pdf')]/@href",
+              "multi": false,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='block block-core']/h1/span/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='field-item']/time/text()",
+          
+        }
+      ]
+    }
+  }
+}

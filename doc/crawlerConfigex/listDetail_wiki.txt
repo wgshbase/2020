@@ -1,0 +1,65 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://zh.wikipedia.org/wiki/Category:%E7%BE%8E%E5%9C%8B%E7%A9%BA%E8%BB%8D%E6%B5%B7%E5%A4%96%E5%9F%BA%E5%9C%B0"],
+  "domain": "zh.wikipedia.org",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='mw-category-group']/ul/li/a/@href", 
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"wiki",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 3,
+      "pagingType": "rule",
+      "pageNumRules": "https://zh.wikipedia.org/wiki/Category:%E7%BE%8E%E5%9C%8B%E7%A9%BA%E8%BB%8D%E6%B5%B7%E5%A4%96%E5%9F%BA%E5%9C%B0?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='mw-parser-output']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='album-list']",
+		          		"//div[@class='thumb tright']",
+		          		"//div[@class='toc']",
+		          		"//table[@class='mbox-small plainlinks sistersitebox']",
+		          		"//div[@role='navigation']",
+		          		"//div[@class='reflist columns references-column-count references-column-count-2']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@id='firstHeading']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@id='content-block']/div[@class='byline']/time/text()",
+          
+        }
+      ]
+    }
+  }
+}

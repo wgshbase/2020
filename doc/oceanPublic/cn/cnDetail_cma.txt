@@ -1,0 +1,64 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xqxyw/"],
+  "domain": "www.cma.gov.cn",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//td[@width='72%']/a/@href",
+  "src":"中国气象局",
+  "newsCategory":"中国",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xqxyw/?1"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "///div[@class='TRS_Editor']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//style",
+               			]
+          }
+          ,
+          "innerFileConfigs": [
+                      {
+                        "resourceName": "image",
+                        "resourceRegionExp": "//img/@src",
+                        "multi": true,
+                      }
+                    ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='news_text']/h1/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@style='width:500px; float:left']/text()",
+
+        }
+      ]
+    }
+  }
+}

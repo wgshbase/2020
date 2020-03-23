@@ -1,0 +1,62 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.csis.org/analysis?=&type=publication&field_publication_type%5B1%5D=782"],
+  "domain": "www.csis.org",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='teaser__title']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"CSIS",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.csis.org/analysis?type=publication&field_publication_type%5B1%5D=782&page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='article-body']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p[@class='selectionShareable']/a",
+               			"//iframe",
+               			"//div[@class='author-box no-print']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src | //img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='headline']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='post-date col col-25']/ul[@class='clean-list']/li[1]/text()",
+          
+        }
+      ]
+    }
+  }
+}

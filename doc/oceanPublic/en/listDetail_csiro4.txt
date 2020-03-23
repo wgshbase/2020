@@ -1,0 +1,62 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.csiro.au/en/Research/OandA/Areas/Marine-technologies?1"],
+  "domain": "www.csiro.au",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//a[@class='card card--remove-box-shadow card__block']/@href",
+  "newsCategory":"澳大利亚",
+  "dbType":"news_other",
+  "src": "CSIRO",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.csiro.au/en/Research/OandA/Areas/Marine-technologies"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='maincontent']/main[@class='section__list']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//div[@class='call-to-action section section--med']",
+               			"//div[@class='related-links']",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='banner__text']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='meta-heading']/text()",
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.sdocean.org.cn/news_01.html"],
+  "domain": "www.sdocean.org.cn",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXpath":"//div[@class='news_item']/a/@href",
+  "src":"山东省海洋预报减灾中心",
+  "newsCategory":"中国",
+  "isPhantomJs":true,
+  "charset":"GB2312",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.sdocean.org.cn/news_01.html?sort=jzdt&${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='WordSection1']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//style",
+               			"//a"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//p[@class='news_title']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='time']/text()",
+
+        }
+      ]
+    }
+  }
+}

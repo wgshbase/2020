@@ -1,0 +1,65 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://space.skyrocket.de/directories/sat_nav_usa.htm"],
+  "domain": "space.skyrocket.de",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//tr/td/ul/li/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"SPACE",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://space.skyrocket.de/directories/sat_nav_usa.htm?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_com_nav",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='container']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//table[@id='satlist']",
+               			"//table[@id='satdata']",
+               			"//div[@class='clearall']",
+               			"//div[@class='ref']",
+               			"//ul[@id='breadcrumbs']",
+               			"//h1"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//table[@id='satdata']",
+          
+        },
+      ]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://www.jcs.mil/Media/News/"],
+  "domain": "www.jcs.mil",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//span[@class='title']/a/@href",  
+  "newsCategory":"联合国新闻",
+  "dbType":"news_other",
+  "src":"Joint Chifes of Staff",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.jcs.mil/Media/News/?Page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@itemprop='articleBody']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='overlay']",
+               			"//div[@class='action']",
+               			"//div[@class='media-inline-popup']",
+               			"//style"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@itemprop='headline']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@itemprop='datePublished']/@content",
+          
+        }
+      ]
+    }
+  }
+}

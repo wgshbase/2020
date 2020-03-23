@@ -1,0 +1,68 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.hawaii.edu/news/tag/uh-manoa/"],
+  "domain": "www.hawaii.edu",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//h2[@class='blog-entry-title entry-title']/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"HAWAII",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.hawaii.edu/news/tag/uh-manoa/page/${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='single-blog-content entry clr']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='crp_related ']",
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='page-header-title wpex-clr']/span/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//time[@class='updated']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//span[@class='fn']/a/text()",
+
+        }
+      ]
+    }
+  }
+}

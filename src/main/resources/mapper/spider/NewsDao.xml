@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="io.renren.modules.spider.dao.NewsDao">
+	
+	<update id="clearNotExistPdf" parameterType="io.renren.modules.spider.entity.News">
+		UPDATE news_wx SET pdffiles = '' WHERE id = #{id}
+	</update>
+	
+	<select id="getNewsPdfs" parameterType="String" resultType="io.renren.modules.spider.entity.News">
+		<![CDATA[SELECT id FROM news_wx where crawlerdate > #{begindate} and crawlerdate < #{enddate} and pdffiles != '']]>
+	</select>
+	
+	<select id="getPublicnameByAttachfilesName" resultType="String">
+		SELECT publicname FROM ${tablename} WHERE attchfiles LIKE #{attachfiles}
+	</select>
+	<select id="getPublicnameById" resultType="String">
+		SELECT publicname FROM ${tablename} WHERE id = #{id}
+	</select>
+	<select id="queryObject" resultType="io.renren.modules.spider.entity.News">
+		select * from news where id = #{id} 
+	</select>
+	
+	<select id="queryList" parameterType="map" resultType="io.renren.modules.spider.entity.News">
+		select * from news where 1 = 1 order by crawlerdate desc, pubdate desc		
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="searchProblemByQuery" parameterType="map" resultType="io.renren.modules.spider.entity.News">
+        select max(pubdate) as pubdate,max(crawlerdate) as crawlerdate, siteDomain from ${dbname} GROUP BY siteDomain
+        having max(pubdate) &lt; #{targetDate} ORDER BY crawlerdate asc, pubdate DESC
+        <if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+    <select id="searchProblemCountByQuery" parameterType="map" resultType="int">
+        select count(t.rr) from (select count(id) rr from ${dbname} GROUP BY siteDomain
+        having MAX(pubdate) &lt; #{targetDate}) t ;
+    </select>
+
+	<select id="queryListByKeyword" parameterType="map" resultType="io.renren.modules.spider.entity.News">
+		select * from ${dbname}
+        <if test="keyword != '' and keyword != null">
+            where title like '%${keyword}%'
+        </if>
+		order by crawlerdate desc, pubdate desc
+		<if test="offset != null and limit != null">
+			limit ${offset}, ${limit}
+		</if>
+	</select>
+	
+	<select id="queryById" parameterType="map" resultType="io.renren.modules.spider.entity.News">
+		select * from ${dbname} where id = #{id}	
+	</select>
+	
+	<select id="queryListCountByKeyword" parameterType="map" resultType="int">
+		select count(*) from ${dbname}
+        <if test="keyword != '' and keyword != null">
+            where title like '%${keyword}%'
+        </if>
+	</select>
+	
+	<select id="queryTotal" parameterType="map" resultType="int">
+		select count(*) from news where 1 = 1 
+		
+	</select>
+	
+	<insert id="save" parameterType="io.renren.modules.spider.entity.News">
+		insert into news(`id`,`title`,`attchfiles`,`pubdate`,`sourcesite`,`summary`,`url`,`sitedomain`,`author`,`crawlerdate`)
+			values(#{id},#{title},#{attchfiles},#{pubdate},#{sourcesite},#{summary},#{url},#{sitedomain},#{author},#{crawlerdate})
+	</insert>
+	
+	<update id="update" parameterType="io.renren.modules.spider.entity.News">
+		update news set `title` = #{title}, `attchfiles` = #{attchfiles}, `pubdate` = #{pubdate} ,`sourcesite` = #{sourcesite}, `summary` = #{summary}, `url` = #{url}
+			 where id = #{id}
+	</update>
+
+	<update id="updateNewsInformation" parameterType="io.renren.modules.spider.entity.News">
+		update ${dbname} set `title` = #{title}, `content` = #{content} where id = #{id}
+	</update>
+
+	<delete id="deleteBatch" parameterType="string">
+		delete from news where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+    <delete id="deleteNewsBatch">
+        DELETE FROM ${tablename} WHERE id in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <select id="selectMinPubdateByGivingIdlist" resultType="string">
+        SELECT min(pubdate) FROM ${tablename} WHERE id in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectCountRecordsWithMinPubdate" resultType="io.renren.modules.spider.entity.News">
+        SELECT id, content FROM ${tablename} WHERE id in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND pubdate = #{minPubdate}
+    </select>
+
+    <select id="removeDulpRecordsHavingOlderPubdate" resultType="string">
+        SELECT id FROM ${tablename} WHERE id in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND pubdate > #{minPubdate}
+    </select>
+
+    <select id="getAllBy" parameterType="map" resultType="java.util.LinkedHashMap">
+		select * from ${tbname} where pubdate >= #{pubdate} and crawlerdate > #{begindate} and crawlerdate <![CDATA[<]]> #{enddate}
+	</select>
+	
+	<select id="getNamespace4Replace" resultType="io.renren.modules.spider.entity.News">
+		select id, content, attchfiles, content_tr as contentTr from news_en_copy
+	</select>
+	
+	<update id="updatebatch" parameterType="io.renren.modules.spider.entity.News">
+		<foreach collection="list" item="item" index="index" 
+	        separator=";">
+			UPDATE ${tbname} SET formattedContent=#{item.formattedContent} WHERE id=#{item.id}
+	    </foreach>
+	</update>
+	<update id="updateNews">
+			UPDATE ${tbname} SET formattedContent=#{formattedContent} WHERE id=#{id}
+	</update>
+	<select id="selectNews2update" resultType="io.renren.modules.spider.entity.News">
+		SELECT * from news_cn
+	</select>
+	<update id="updateNewsSummary">
+		UPDATE news_cn SET summary=#{summary} WHERE id=#{id}
+	</update>
+
+	<!-- 获取所有的武器库的武器名称 -->
+	<select id="getWeaponNames" resultType="string">
+		SELECT title FROM weapon
+	</select>
+    <select id="getTitleWithMinCrawlerdate" resultType="io.renren.modules.spider.entity.News">
+        select min(crawlerdate) crawlerdate,id, title from ${tablename} GROUP BY title having title in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getTitleWithCrawlerdate" resultType="io.renren.modules.spider.entity.News">
+        select crawlerdate,id,title from ${tablename} where title in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getDulpTitles" resultType="java.lang.String">
+        select title from ${tablename} GROUP BY title having count(title) > 1
+    </select>
+
+    <!-- 批量更新第一种方法，通过接收传进来的参数list进行循环着组装sql -->
+    <update id="batchUpdate" parameterType="java.util.Map">
+        <!-- 接收list参数，循环着组装sql语句，注意for循环的写法
+             separator=";" 代表着每次循环完，在sql后面放一个分号
+             item="cus" 循环List的每条的结果集
+             collection="list" list 即为 map传过来的参数key -->
+        <foreach collection="list" separator=";" item="cus">
+            update t_customer set
+            c_name = #{cus.name},
+            c_age = #{cus.age},
+            c_sex = #{cus.sex},
+            c_ceroNo = #{cus.ceroNo},
+            c_ceroType = #{cus.ceroType}
+            where id = #{cus.id}
+        </foreach>
+    </update>
+ 
+    <!-- 批量更新第二种方法，通过 case when语句变相的进行批量更新 -->
+    <update id="batchUpdateCaseWhen" parameterType="java.util.Map">
+        update t_customer
+        <trim prefix="set" suffixOverrides=",">
+            <!-- 拼接case when 这是一种写法 -->
+            <!--<foreach collection="list" separator="" item="cus" open="c_age = case id" close="end, ">-->
+            <!--when #{cus.id} then #{cus.age}-->
+            <!--</foreach>-->
+ 
+            <!-- 拼接case when 这是另一种写法，这种写着更专业的感觉 -->
+            <trim prefix="c_name =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    <if test="cus.name!=null">
+                        when id=#{cus.id} then #{cus.name}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="c_age =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    <if test="cus.age!=null">
+                        when id=#{cus.id} then #{cus.age}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="c_sex =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    <if test="cus.sex!=null">
+                        when id=#{cus.id} then #{cus.sex}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="c_ceroNo =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    <if test="cus.ceroNo!=null">
+                        when id=#{cus.id} then #{cus.ceroNo}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="c_ceroType =case" suffix="end,">
+                <foreach collection="list" item="cus">
+                    <if test="cus.ceroType!=null">
+                        when id=#{cus.id} then #{cus.ceroType}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        <where>
+            <foreach collection="list" separator="or" item="cus">
+                id = #{cus.id}
+            </foreach>
+        </where>
+    </update>
+    
+    <select id="getNewsContent" resultType="io.renren.modules.spider.entity.News">
+    	SELECT id, xin_wen_zheng_wen as content from ${tablename}
+    </select>
+    
+    <update id="updateNewsContentById" parameterType="string">
+    	UPDATE ${tablename} SET xin_wen_zheng_wen = #{content} WHERE id=#{id}
+    </update>
+
+    <insert id="saveRecordBatch" parameterType="java.util.List">
+        INSERT INTO aaa(recodename,username,countryname,registernum,recordnum,registertype,producttype)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.recodename},
+            #{item.username},
+            #{item.countryname},
+            #{item.registernum},
+            #{item.recordnum},
+            #{item.registertype},
+            #{item.producttype}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="saveAnotherRecordBatch" parameterType="java.util.List">
+        INSERT INTO aaaa(registernum,recodename,recordnum,username)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.registernum},
+            #{item.recodename},
+            #{item.recordnum},
+            #{item.username}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

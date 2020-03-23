@@ -1,0 +1,70 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.thejakartapost.com/news/index"],
+  "domain": "www.thejakartapost.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='newsWord']/a[contains(@href,'html')]/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"THEJAKARTAPOST",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.thejakartapost.com/news/index?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='col-xs-12 main-single']/div[@class='row']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p/strong",
+               			"//div[@class='post-like']",
+               			"//div[@class='topicRelated']",
+               			"//div[@class='col-md-2 col-xs-12 single-share']",
+               			"//div[@class='comment-new']",
+               			"//div[@id='div-gpt-ad-6713951-1']",
+               			"//div[@id='div-gpt-ad-74843-10']",
+               			"//div[@style='position: static; width: 80px; height: 434px; display: block; vertical-align: baseline; float: left;']",
+               			"//span[@class='show-define-area']",
+               			"//iframe",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src | //img/@src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='title-large']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='day']/text()",
+          
+        }
+      ]
+    }
+  }
+}

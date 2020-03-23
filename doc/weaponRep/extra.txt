@@ -1,0 +1,41 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["NewsDBPipeline"],
+  "startURL": [ "http://weapon.huanqiu.com/weaponmaps/"],
+  "domain": "weapon.huanqiu.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//h3[@class='title']/span/a/@href",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://weapon.huanqiu.com/weaponmaps/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "pagingModel": {
+	      "pagerXpath": "//div[@class='pages']/a[9]/@href"
+	  },
+      "objName": "weapons_extras",      
+      "objXpath": "//div[@class='picList']/ul/li",
+      "fileNameRules":["title"],
+      "multi": true,   
+      "fieldList": [
+      	{
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "classify",
+          "fieldExtractorExp": "//span[@class='category']/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//span[@class='name']/a/text()",
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://www.ndrc.gov.cn/xwdt/xwfb/index_1.html?1"],
+  "domain": "www.ndrc.gov.cn",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//ul[@class='u-list']/li/a/@href",
+  "src":"中华人民共和国国家发展和改革委员会",
+  "newsCategory":"中国",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.ndrc.gov.cn/xwdt/xwfb/index_${page}.html"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='TRS_Editor']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//style",
+               			]
+          }
+          ,
+          "innerFileConfigs": [
+                      {
+                        "resourceName": "image",
+                        "resourceRegionExp": "//img/@src",
+                        "multi": true,
+                      }
+                    ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h2[@class='article_title']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='time']/text()",
+
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,77 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.defensenews.com/"],
+  "domain": "www.defensenews.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='col-xs-8']/figure/a/@href", 
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"DefenseNews",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.defensenews.com/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='article-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='mco-body-item mco-body-type-interstitial_link']",
+               			"//div[@id='300x250-0-in-story']",
+               			"//div[@id='300x250-1-in-story']",
+               			"//blockquote[@class='twitter-tweet']",
+               			"//iframe",
+               			"//div[@class='container signup newsletter']",
+               			"//style",
+               			"//script",
+               			"//img[@class='logo']",
+               			"//img[@class='image-lazy']",
+               			"//dialog[@id='nl-modal-dialog']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@itemprop='name']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='author-name-wrap addthis']/span[@class='publish addthis']/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='author-name']/text()",
+          
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.cgs.gov.cn/xwl/ddyw/index.html"],
+  "domain": "www.cgs.gov.cn",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//ul[@id='feizhiding']/li/a/@href",
+  "src":"中国地质调查局",
+  "newsCategory":"中国",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.cgs.gov.cn/xwl/ddyw/index.html?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='TRS_Editor']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//style"
+               			]
+          }
+          ,
+          "innerFileConfigs": [
+                      {
+                        "resourceName": "image",
+                        "resourceRegionExp": "//img/@src",
+                        "multi": true,
+                      }
+                    ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='c_caption']/h1/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@name='PubDate']/@content",
+
+        }
+      ]
+    }
+  }
+}

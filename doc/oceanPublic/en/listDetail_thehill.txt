@@ -1,0 +1,61 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://thehill.com/search/query/south%20china%20sea"],
+  "domain": "thehill.com",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//h3[@class='title']/a/@href",
+  "newsCategory":"英国",
+  "dbType":"news_other",
+  "src": "THEHILL",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://thehill.com/search/query/south%20china%20sea?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='field-item even']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//div[@id='dfp-ad-incontent_desk_1-wrapper']",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@id='page-title']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@property='article:published_time']/@content",
+        }
+      ]
+    }
+  }
+}

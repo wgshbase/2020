@@ -1,0 +1,68 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.chinanews.com/world.shtml"],
+  "domain": "www.chinanews.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='dd_bt']/a/@href",
+  "newsCategory":"中文新闻",
+  "sslm":"A01",
+  "src":"中新网",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.chinanews.com/world.shtml?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='left_zw']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@id='adhzh']",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@srcset",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='content']/h1/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='left-t']/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "sourceSite",
+          "fieldExtractorExp": "//div[@class='left-t']/text()",
+          
+        }
+      ]
+    }
+  }
+}

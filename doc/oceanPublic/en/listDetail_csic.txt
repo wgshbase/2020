@@ -1,0 +1,63 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.csic.es/en/latest-news"],
+  "domain": "www.csic.es",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+  "sslm":"oceanEn",
+  "isPhantomJs":true,
+  "listHrefXPath":"//div[@class='col-md-8']/h5/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"CSIC",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 0,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.csic.es/en/latest-news?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='field field-name-body field-type-text-with-summary field-label-hidden']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p[@class='rteright']",
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='page-header']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='field-item even']/span[@datatype='xsd:dateTime']/@content",
+
+        }
+      ]
+    }
+  }
+}

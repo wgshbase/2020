@@ -1,0 +1,70 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://www.esa.int"],
+  "domain": "www.esa.int",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='grid-item story']/a/@href",
+  "newsCategory":"欧洲新闻",
+  "dbType":"news_other",
+  "src": "ESA",
+  "pagingModel": {
+      "startPage": 0,
+      "step": 50,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.esa.int/(archive)/${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//article",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//header[@class='entry article__block']",
+               			"//div[@class='breadcrumbs article__block article__item']",
+               			"//div[@class='share button-group article__block article__item']",
+               			"//div[@id='social']",
+               			"//div[@class='dots']",
+               			"//div[@id='s_2']",
+               			"//div[@id='pi_player_1']",
+               			"//div[@class='img_obj c_img']"
+               			"//div[@class='xtra']",
+               			"//iframe"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='heading heading--main article__item']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='meta article__item']/span[1]/text()",
+          
+        }
+      ]
+    }
+  }
+}

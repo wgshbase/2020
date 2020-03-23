@@ -1,0 +1,69 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://indianexpress.com/section/india/"],
+  "domain": "indianexpress.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//h3[@class='m-article-landing__title']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"TheIndianEXPRESS",
+  "sslm":"A02",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://indianexpress.com/section/india/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='o-story-content__main a-wysiwyg']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//aside[@class='o-story-content__related o-story-content__related--large']",
+               			"//aside[@class='o-story-content__ad']",
+               			"//section[@class='o-story-content__live']"
+               			"//aside[@class='o-story-content__related']",
+               			"//div[@class='m-story-link']",
+               			"//div[@class='yarpp-related']",
+               			"//div[@class='m-advert m-advert--border-top m-advert@medium+--border-bottom m-advert--small']",
+               			"//div[@class='IE_Desk_30010']",
+               			"//div[@id='gpt_ad_IE_ROS_OOP_INNOV2']",
+               			"//figure[@class='wp-caption alignnone']/img",
+               			"//iframe"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='m-story-header__title']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@itemprop='datePublished']/@content",
+        }
+      ]
+    }
+  }
+}

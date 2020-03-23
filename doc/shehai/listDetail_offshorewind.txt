@@ -1,0 +1,58 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.offshorewind.biz/news/"],
+  "domain": "www.offshorewind.biz",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//h3[@class='card-rich__title']/a/@href",
+  "newsCategory":"欧洲新闻",
+  "dbType":"news_other",
+  "src": "OFFSHOREWIND",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.offshorewind.biz/news/page/${page}/"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='wp-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='hero-content__title']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='hero-content__meta-info']/text()",
+        }
+      ]
+    }
+  }
+}

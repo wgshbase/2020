@@ -1,0 +1,78 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.washington.edu/news/the-latest-news-from-the-uw/"],
+  "domain": "www.washington.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@id='main_content']/h2/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"WASHINGTON",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.washington.edu/news/the-latest-news-from-the-uw/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='main_content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p[@class='story-tags']",
+               			"//p[@class='date']",
+               			"//h1[@class='entry-title']",
+               			"//div[@class='author-info']",
+               			"//nav[@id='mobile-relative']",
+               			"//div[@id='attachment_64607']",
+               			"//div[@class='info-box']",
+               			"//div[@class='addtoany_share_save_container addtoany_content addtoany_content_bottom']",
+               			"//span[@class='next-page']",
+               			"//iframe",
+               			"//small"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//meta[@property='og:title']/@content",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='date']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='author url fn']/text()",
+
+        }
+      ]
+    }
+  }
+}

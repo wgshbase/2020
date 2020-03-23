@@ -1,0 +1,63 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://alert5.com/"],
+  "domain": "alert5.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='post']/h2/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"Alert5",
+  "sslm":"A04",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 3,
+      "pagingType": "rule",
+      "pageNumRules": "http://alert5.com/page/${page}/"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='entry']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//a[@class='external external_icon']",
+               			"//div[@style='font-size: 0px; height: 0px; line-height: 0px; margin: 0; padding: 0; clear: both;']",
+               			"//div[@class='socialize-containter']",
+               			"//div[@class='yarpp-related']",
+               			"//p[@class='postmetadata2']",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='post']/h2/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//link[@rel='canonical']/@href",
+        }
+      ]
+    }
+  }
+}

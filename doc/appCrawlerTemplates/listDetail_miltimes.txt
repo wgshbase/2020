@@ -1,0 +1,73 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.militarytimes.com/news/"],
+  "domain": "www.militarytimes.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//figure/a/@href",
+  "newsCategory":"美国新闻",
+  "sslm":"A02",
+  "dbType":"news_other",
+  "src":"MilitaryTimes",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.militarytimes.com/news/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='article-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='mco-body-item mco-body-type-interstitial_link']",
+               			"//iframe",
+               			"//blockquote[@class='twitter-tweet']",
+               			"//div[@class='newsletter-subscribe']",
+               			"//div[@id='300x250-0-in-story']",
+               			"//dialog"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@itemprop='name']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='author-name-wrap addthis']/span[@class='publish addthis']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='author-name']/text()",
+
+        }
+      ]
+    }
+  }
+}

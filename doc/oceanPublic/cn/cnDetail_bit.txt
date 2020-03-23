@@ -1,0 +1,64 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.bit.edu.cn/xww/zhxw/index1.htm?1"],
+  "domain": "www.bit.edu.cn",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='item-txt04']/h3/a/@href",
+  "src":"北京理工大学",
+  "newsCategory":"中国",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.bit.edu.cn/xww/zhxw/index${page}.htm"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='article']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//style"
+               			]
+          }
+          ,
+          "innerFileConfigs": [
+                      {
+                        "resourceName": "image",
+                        "resourceRegionExp": "//img/@src",
+                        "multi": true,
+                      }
+                    ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='articleTitle']/h3/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='articleAuthor']/p/span/text()",
+
+        }
+      ]
+    }
+  }
+}

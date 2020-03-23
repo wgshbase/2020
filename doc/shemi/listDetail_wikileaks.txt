@@ -1,0 +1,55 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["NewsTranslate2DBPipeline"],
+  "startURL": [ "https://wikileaks.org/-News-.html"],
+  "domain": "wikileaks.org",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//li/h3[@class='title']/a/@href",
+  "newsCategory":"美国新闻",
+  "isGoogleSite": true,
+    "isUseProxy":true,
+  "dbType":"news_other", 
+  "src":"WIKILEAKS",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://wikileaks.org/-News-.html?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='text-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			]
+          },
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='container-text']/h1/a/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='timestamp']/font/font/text() | //div[@class='timestamp']/text()",
+          
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://news.buaa.edu.cn/zhxw.htm"],
+  "domain": "news.buaa.edu.cn",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='listleftop1 auto']/h2/a/@href",
+  "src":"北京航空航天大学",
+  "newsCategory":"中国",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://news.buaa.edu.cn/zhxw.htm?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='v_news_content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//style"
+               			]
+          }
+          ,
+          "innerFileConfigs": [
+                      {
+                        "resourceName": "image",
+                        "resourceRegionExp": "//img/@src",
+                        "multi": true,
+                      }
+                    ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='newslefttit auto']/h1/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='ri']/text()",
+
+        }
+      ]
+    }
+  }
+}

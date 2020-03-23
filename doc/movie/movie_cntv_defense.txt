@@ -1,0 +1,37 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://tv.cctv.com/lm/fwxgc/videoset/index.shtml?spm=C52346.P82061287826.E82642345384.1"],
+  "domain": "tv.cctv.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='text']/a/@href",
+  "newsCategory":"CCTV视频",
+  "dbType":"news_cn",
+  "src": "CCTV",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://tv.cctv.com/lm/fwxgc/videoset/index.shtml?spm=C52346.P82061287826.E82642345384.1&${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "movie",
+          "fieldExtractorType": "html",
+          "fieldName": "//video[@id='player']",
+          "fieldExtractorExp": "//video[@id='player']",
+          "videoType":"cctv",
+          "videoStorePath":"D:/data/webmagic/CNTV_防务新观察/",
+          "zippath":"F:/ManualPath/Video/CNTV_防务新观察/"
+        }
+      ]
+    }
+  }
+}

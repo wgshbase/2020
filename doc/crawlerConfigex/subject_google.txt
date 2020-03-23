@@ -1,0 +1,75 @@
+﻿{
+  "userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36",
+  "pageProcessorModel":"subject",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "isGoogleSite": true,
+  "isUseProxy":true,
+  "pageSize":5,  
+  "seedRex": [
+        "https://www.google.com/search?q=${keyword}&source=lnms&tbm=nws&pn=${index}&cl=2"
+      ],
+  "indexFile":"D:/workspace/product/BSCrawler/doc/crawlerConfigex/q4.txt",
+  "listHrefXPath":"//a[@class='top NQHJEb dfhHve']/@href",
+  "newsCategory":"外国新闻",
+  "dbType":"news_en",
+  "src":"谷歌新闻",
+  "extractorCfgs": {
+        "spaceflightnow.com": {
+            "objName": "news_en",
+            "fieldList": [{
+                    "sourceType": "rawtext",
+                    "fieldName": "title",
+                    "fieldExtractorExp": "//h1[@class='entry-title']/text()"
+                },
+                {
+                    "sourceType": "datetext",
+                    "fieldName": "pubDate",
+                    "fieldExtractorExp": "//span[@class='entry-meta-date updated']/li/a/text()"
+                },
+                {
+                    "sourceType": "newstext",
+                    "fieldName": "content",
+                      "fieldExtractorExp": "//div[@class='entry-content clearfix']",
+                      "excludeRegionExp": {
+                           "xpath":[
+                                    "//div[@class='mh-share-buttons mh-row clearfix']",
+                                    "//div[@class='mh-social-top']",
+                                    "//iframe",
+                                    "//em",
+                                    "//div[@id='mnet_video_div']",
+                                    "//div[@class='mh-social-bottom']",
+                                    "//div[@class='placeHolder']",
+                                    "//div[@id='LB24']",
+                                    "//div[@id='player']",
+                                    "//img[contains(@src,'yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')]",
+                                    ]
+                      },
+                    "innerFileConfigs": [{
+                        "resourceName": "image",
+                        "resourceRegionExp": "//img/@src",
+                        "multi": true
+
+                    }]
+                },
+                  {
+                    "sourceType": "rawtext",
+                    "fieldExtractorType": "html",
+                    "fieldName": "author",
+                    "fieldExtractorExp": "//span[@class='entry-meta-author vcard']/a/text()",
+
+                  }
+            ]
+        }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [ 
+	"https://www.google.com/search?q=%E7%BE%8E%E5%86%9B&source=lnms&tbm=nws&pn=0&cl=2"
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "www.google.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 10000
+}

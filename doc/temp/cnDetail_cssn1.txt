@@ -1,0 +1,74 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://reli.cssn.cn/zjx/zjx_zjyj/zjx_zjxll/"],
+  "domain": "reli.cssn.cn",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='ImageListView']/ol/li/a/@href",
+  "newsCategory":"中文新闻",
+  "dbType":"news_cn",
+  "src":"中国社会科学网",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://reli.cssn.cn/zjx/zjx_zjyj/zjx_zjxll/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,  
+      "pagingModel": {
+	      "pagerXpath": "//a[@class='fenyepage']/@href"
+	  },
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='Zoom']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p[@class='fontkaiti']",
+               			"//style",
+               			"//script",
+               			"//a[@id='分享']",
+               			"//div[@class='ImageListView ImageListViewpage fenye']",
+               			"//div[@class='bshare-custom f-main-leftMain_icon']",
+               			"//div[@class='f-main-leftMain_programa']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            },
+            {
+              "resourceName": "pdf",
+              "resourceRegionExp": "//a[contains(@href,'pdf')]/@href",
+              "multi": false,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//span[@class='TitleFont']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='TitleFont2']/text()",
+          
+        }
+      ]
+    }
+  }
+}

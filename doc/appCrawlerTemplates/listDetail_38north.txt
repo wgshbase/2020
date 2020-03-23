@@ -1,0 +1,65 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.38north.org/topics/satellite-analysis/"],
+  "domain": "www.38north.org",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//h2[@class='article__title']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"38NORTH",
+  "sslm":"A02",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.38north.org/topics/satellite-analysis/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//header",
+               			"//div[@class='social-share-container no-print']",
+               			"//ol[@class='footnotes list-unstyled']",
+               			"//hr[@class='short']",
+               			"//ul[@class='post__tags no-print list-inline']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='page-header']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//li[@class='meta--date']/text()",
+          
+        }
+      ]
+    }
+  }
+}

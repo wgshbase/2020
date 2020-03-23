@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="io.renren.modules.spider.dao.SpiderInfoDao">
+	<select id="queryObject" resultType="io.renren.modules.spider.entity.SpiderInfo">
+		select * from spider_info where id = #{id}
+	</select>
+
+    <select id="queryList" parameterType="map" resultType="io.renren.modules.spider.entity.SpiderInfo">
+        select * from spider_info where 1 = 1
+        <if test="domain != null and domain.trim() != ''">
+          and domain like '%${domain}%'
+        </if>
+        order by site_name
+        <if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+        </if>
+	</select>
+	
+	<select id="queryTotal" parameterType="map" resultType="int">
+		select count(*) from spider_info where 1 = 1
+        <if test="domain != null and domain.trim() != ''">
+            and domain like '%${domain}%'
+        </if>
+	</select>
+	
+	<insert id="save" parameterType="io.renren.modules.spider.entity.SpiderInfo">
+		insert into spider_info(`id`,`site_name`, `domain`, `json_data`)
+			values(#{id},#{siteName},#{domain},#{jsonData})
+	</insert>
+	
+	<update id="update" parameterType="io.renren.modules.spider.entity.SpiderInfo">
+		update spider_info set `site_name` = #{siteName}, `domain` = #{domain}, `json_data` = #{jsonData} 
+			 where id = #{id}
+	</update>
+	
+	<delete id="deleteBatch" parameterType="string">
+		delete from spider_info where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

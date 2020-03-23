@@ -1,0 +1,69 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.dcma.mil/News/"],
+  "domain": "www.dcma.mil",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//p[@class='title']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"Defense Contract Management Agency",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 3,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.dcma.mil/News/?Page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='adetail news']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//meta",
+                        "//h1[@class='title']",
+                        "//p[@class='info']",
+                        "//div[@class='social']",
+                        "//div[@class='related']",
+                        "//div[@class='tags']",
+                        "//div[@style='clear:both;']",
+                        "//span[@class='dateline']",
+                        "//span[@class='left sub-action']",
+               			"//div[@class='adetail-block']",
+               			"//div[@class='item']/p",
+               			"//div[@class='item']/ul"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@itemprop='headline']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@itemprop='datePublished']/@content",
+        }
+      ]
+    }
+  }
+}

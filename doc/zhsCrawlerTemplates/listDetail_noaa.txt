@@ -1,0 +1,68 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.noaa.gov/media-releases"],
+  "domain": "www.noaa.gov",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//div[@class='view-content']/div/article/div[@class='node-inner']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src":"NOAA",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.noaa.gov/media-releases?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='inside panels-flexible-region-inside panels-flexible-region-new-content-inside panels-flexible-region-inside-first panels-flexible-region-inside-last']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='dnd-legend-wrapper']",
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='pane-content']/h1/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='date-published']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='author url fn']/text()",
+
+        }
+      ]
+    }
+  }
+}

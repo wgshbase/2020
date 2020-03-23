@@ -1,0 +1,75 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.electronicsweekly.com/market-sectors/military-aerospace-electronics/?1"],
+  "domain": "www.electronicsweekly.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//h2[@class='post-title']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src": "Military Aerospace",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.electronicsweekly.com/market-sectors/military-aerospace-electronics/page/${page}/"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,     
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='post-inner']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@data-id='502096']",
+               			"//div[@data-id='605044']",
+               			"//div[@data-id='548221']",
+               			"//div[@data-id='547545']",
+               			"//section[@id='related_posts']",
+               			"//div[@class='clear']",
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//span[@itemprop='name']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@property='article:published_time']/@content",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//span[@class='post-meta-author']/a/text()",
+          
+        }
+        
+      ]
+    }
+  }
+}

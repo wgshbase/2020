@@ -1,0 +1,39 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://v.ifeng.com/vlist/channel/76/showData/first_more.js"],
+  "domain": "v.ifeng.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefRegex":"http://v.ifeng.com/(\\d{6})/video_(\\d{8}).shtml",
+  "newsCategory":"欧洲新闻",
+  "dbType":"news_cn",
+  "src": "v.ifeng.com",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://v.ifeng.com/vlist/channel/76/showData/first_more.js?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "movie",
+          "fieldExtractorType": "html",
+          "fieldName": "//video[@id='player']",
+          "fieldExtractorExp": "//video[@id='player']",
+          "videoType":"ifeng",
+          "videoTitle":"//div[@class='vTit_Inner']/h2",
+          "videoStorePath":"D:/data/webmagic/凤凰视频_军情/",
+          "videoHeadimg":"//li[@class='current']/a/span/img",
+          "zippath":"F:/ManualPath/Video/凤凰视频_军情/"
+        },
+      ]
+    }
+  }
+}

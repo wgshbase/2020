@@ -1,0 +1,67 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://inhabitat.com/news/"],
+  "domain": "inhabitat.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='bottom archive']/h2/a/@href",
+  "newsCategory":"欧洲新闻",
+  "dbType":"news_other",
+  "src": "inhabitat",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://inhabitat.com/news/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='single post-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//div[@class='if-page-toggle']",
+               			"//div[@class='vdb_player ']",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='fullwidth-posttitle']/h1/text()",
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//section[@class='single author-info']/div[@class='author-name']/a[@rel='author']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//li[@class='time first']/a/text()",
+        }
+      ]
+    }
+  }
+}

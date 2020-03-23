@@ -1,0 +1,61 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://news.miami.edu/topics/rsmas-ocean.html?1"],
+  "domain": "news.miami.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//h2[@class='stagsansmedium']/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src": "NEWS MIAMI EDU",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://news.miami.edu/topics/rsmas-ocean.html"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='large-9 medium-12 small-12 columns columns-no-pad-right content-main']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//div[@id='topics']",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='staglight white']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='date-block']/time/text()",
+        }
+      ]
+    }
+  }
+}

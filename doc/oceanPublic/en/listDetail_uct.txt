@@ -1,0 +1,69 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.news.uct.ac.za/article/-action/list/-archive/all/-category/research-innovation/-year/all/-month/all"],
+  "domain": "www.news.uct.ac.za",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='vertical-center']/a[1]/@href",
+  "newsCategory":"南非",
+  "dbType":"news_other",
+  "src":"UNIVERSITY OF CAPE TOWN NEWS",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 2,
+      "step": 18,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.news.uct.ac.za/article/-action/list/-archive/all/-category/research-innovation/-year/all/-month/all/-page/${page}.18"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='col-xs-12 col-md-8 trackScroll']/div[@class='t-17']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='col-xs-12 col-md-8 trackScroll']/div[@class='t-17']/div[@class='t-17']",
+               			"//p[@class='press_contact']",
+               			"//div[@id='press_logo']",
+               			"//div[@id='date_org']",
+               			"//iframe",
+               			"//script",
+               			"//figure",
+               			"//blockquote",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='m-b-20 t-xs-30 t-sm-41']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='subheading-border']/text()",
+
+        }
+      ]
+    }
+  }
+}

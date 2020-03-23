@@ -1,0 +1,62 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://bjgy.chinacourt.org/article/index/id/MzAwMjAwBCPCAAA.shtml"],
+  "domain": "bjgy.chinacourt.org",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@id='list']/ul/li/span[@class='left']/a/@href",  
+  "newsCategory":"中文新闻",
+  "src":"北京法院网",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://bjgy.chinacourt.org/article/index/id/MzAwMjAwBCPCAAA/${page}.shtml"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_gov",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='detail']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='detail_location']",
+               			"//div[@class='title']",
+               			"//div[@class='sth_b']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='b_title']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='title']/div[@class='sth_a']/span/text()",
+          
+        }
+      ]
+    }
+  }
+}

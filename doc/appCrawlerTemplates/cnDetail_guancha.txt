@@ -1,0 +1,62 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://www.guancha.cn/military-affairs?s=dhjunshi"],
+  "domain": "www.guancha.cn",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//h4[@class='module-title']/a/@href",
+  "newsCategory":"中文新闻",
+  "sslm":"A04",
+  "src":"观察者网",
+  "dbType":"news_cn",  
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.guancha.cn/JunShi/list_${page}.shtml"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='content all-txt']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//txpdiv",
+               			"//iframe"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//li[@class='left left-main']/h3/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='time fix']/span/text()",
+          
+        }
+      ]
+    }
+  }
+}

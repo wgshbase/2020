@@ -1,0 +1,55 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.rd.com/"],
+  "domain": "www.rd.com",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+  "sslm":"oceanEn",
+  "listHrefXPath":"//header/div[@class='loop-content']/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"RD",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 4,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.rd.com/page/${page}/?s=ocean"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='entry-content']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//iframe",
+                        "//script",
+                        "//img"
+               			]
+          }
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='entry-title']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@property='article:published_time']/@content",
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+  "pageProcessorModel":"batchUrls",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "indexFile":"D:/workspace/product/BSCrawler/doc/huangnana/index_wiki.txt",
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_satellite",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='mw-content-text']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//noscript",
+                        "//div[@class='reflist']",
+                        "//div[@role='navigation']",
+                        "//div[@role='presentation']",
+                        "//table[@role='presentation']",
+                        "//table[@class='infobox']",
+                        "//span[@class='mw-editsection']",
+                        "//span[@id='References']",
+                        "//sup[contains(@id,'cite_ref')]",
+                        "//div[@id='toc']",
+                        "//ul[@class='gallery mw-gallery-traditional']",
+                        "//span[@id='Gallery']",
+                        "//span[@id='See_also']",
+                        ]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@id='firstHeading']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "info",
+          "fieldExtractorExp": "//table[@class='infobox']",
+
+        }
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [
+	"http://wikipedia.moesalih.com/",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "wikipedia.moesalih.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

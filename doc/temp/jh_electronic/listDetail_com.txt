@@ -1,0 +1,77 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.c4isrnet.com/electronic-warfare/"],
+  "domain": "www.c4isrnet.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefRegex":"https://www.c4isrnet.com/[^\"]*(?=\")",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"c4isrnet",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.c4isrnet.com/pb/api/v2/render/feature/global/mco-results-list-load-more?contentConfig=%7B%22_jge%22%3A%22content-feed%22%2C%22Feed-Parameter%22%3A%22%2Felectronic-warfare%22%2C%22Feed-Limit%22%3A%2210%22%2C%22Feed-Offset%22%3A${page}0%7D&customFields=%7B%22artworkPosition%22%3A%22right%22%2C%22offset%22%3A%220%22%2C%22commentsCountCivil%22%3A%22false%22%2C%22showAuthor%22%3A%22true%22%2C%22showDate%22%3A%22true%22%2C%22commentsCountDisqus%22%3A%22false%22%2C%22numItems%22%3A%2211%22%2C%22formattingOption%22%3A%22relative%22%2C%22enabledLoadMore%22%3A%22true%22%2C%22showDescription%22%3A%22true%22%2C%22dateType%22%3A%22displayOnly%22%2C%22showdate%22%3A%22true%22%7D&service=content-feed"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//section[@id='west']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@id='fRebXO1nVkf5vr']",
+               			"//div[@class='author-name-wrap addthis']",
+               			"//span[@class='addthis']",
+               			"//div[@class='thinline']",
+               			"//div[@class=' mco-body-item mco-body-type-interstitial_link']",
+               			"//div[@class='container signup newsletter']",
+               			"//dialog[@id='nl-modal-dialog']",
+               			"//div[@id='flRqzi2nVkf5vr']",
+               			"//div[@id='f0oNPThnVkf5vr']",
+               			"//div[@id='fmYYDt1nVkf5vr']",
+               			"//iframe"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//header[@class='head col-sm-12']/h1/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//span[@itemprop='author']/a[@class='author-name']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@itemprop='datePublished']/@content",
+
+        }
+      ]
+    }
+  }
+}

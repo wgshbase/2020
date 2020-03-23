@@ -1,0 +1,126 @@
+﻿{
+  "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36",
+  "pageProcessorModel":"weixin",
+  "pipelines":["ImgPipeline","NewsDBPipeline","Html2PdfPipeline"],
+  "seedRex":"http://weixin.sogou.com/weixin?type=${type}&s_from=input&query=${query}&ie=utf8",
+  "indexs":["桌面战争"],
+  "newsCategory":"微信资讯",
+  "dbType":"news_cn",
+  "username":"wanggaosheng@bestdatatech.com",
+    "password":"wang13693146553",
+  "targetUrlPatterns": [
+        "https://mp.weixin.qq.com/s/*"
+      ],
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_wx",      
+      "objXpath": "//html",
+      "fileNameRules":["chatNumber","title"],
+      "multi": false,     
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='js_content']",
+          "excludeRegionExp": {
+               	"xpath":[
+               			"//section[@style='text-align: justify;padding-right: 5px;padding-left: 5px;color: rgb(255, 255, 255);box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;vertical-align: middle;width: 73%;padding-right: 6px;padding-left: 6px;box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;width: 100%;vertical-align: top;padding-right: 10px;padding-left: 10px;border: 1px dashed rgb(62, 62, 62);border-radius: 0px;box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;width: 100%;vertical-align: top;padding-right: 10px;padding-left: 10px;border-style: dashed;border-width: 1px;border-radius: 0px;border-color: rgb(62, 62, 62);box-sizing: border-box;']",
+               			"//section[@style='max-width: 100%;vertical-align: middle;display: inline-block;width: 100%;box-sizing: border-box;']",
+               			"//section[@style='margin: 10px;box-sizing: border-box;']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUKUzVd9YxjBxbOP2cpjaRicjz0ZwQmETuuy0NxaebqxCSQGeHEgYhAZicWoTrJvoqWxOLe2StM1l0bw/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUJOic0z2XR6MBB0qlFziciccQcpZv4RYNSzxvpGdoW1yUeTerHxxzOBywgiayAPn1mNlO0uXUKu3HuKhg/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUJ5yKFUK1E4UVRnD9SlpZ1UwNKykQvBbpt0OMVGofOLxib6ZVvGooVVoP1AslNxoBmnP3uUW7ETD3A/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrULmgdvPibuRXqzwxE5GS6dRgLx0BuqZjPFMUpWCTgmvSZM3w6z15PHWgMiabza70EwITH1ejnQlR1MQ/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUKhcKxRJ9D9c1TQRItTdA4pAubBglvIVeiah9arv75ibZvID6tkScBuLI1sjl69ObgMwFWAxk9DzxGQ/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/jibtPMwZ5MWPPUIxkGMyVDchn4hs4KVp71WUpnC8PBNKWkpTGHmdHsdL8P939xKiaRKyX1yAzict5ImbIUibbZfBiaQ/640']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUJqNZ7LluBlCsIBicYmniauyt4spuA4kIicj5ElxUibuj4VQRhnNxNZibTW1dtegBy1VzFttOwFf5gFJSA/640?wx_fmt=jpeg']",
+               			"//img[contains(@data-src, 'jibtPMwZ5MWPPUIxkGMyVDchn4hs4KVp71WUpnC8PBNKWkpTGHmdHsdL8P939xKiaRKyX1yAzict5ImbIUibbZfBiaQ')]",
+               			"//img[contains(@data-src, 'jibtPMwZ5MWPPUIxkGMyVDchn4hs4KVp7SEzRpTWsU9iakibCC4GxSCrhfWiclHibZOsoryXbFSYdLnw16N7t6XkFJA')]",
+               			"//img[contains(@data-src, 'v9YcrHhMrUImfwnxfUv0dcbhWRdlWeMHxicoSicT6K5VQl1LenI7buqT9RRb94Exg9L32wWFHNgTSswyGL1mOOYA')]",
+               			"//img[contains(@data-src, 'v9YcrHhMrULE6d3aPcPjICE87KQXajjLjxSgHqSs0e3K4YdRicB6zukF5r2eSD061cHB7IPfdVA2r6AaRYTu7xg')]",
+               			"//img[contains(@data-src, 'v9YcrHhMrUJtZTLZFNCy7KzaMibmK3A0oJgkI055qCpTHw6u1k3oy9Vic4mT74qB3icwawFH8IwQD4GCgAEZa4DYQ')]",
+               			"//img[contains(@data-src, 'v9YcrHhMrUJtZTLZFNCy7KzaMibmK3A0ocib7dwIiaeZn2A3LZV0qI9Je0DlrRfiaXfBDNVo0jz585mjsv6GcqwIog')]",
+               			"//img[contains(@data-src, 'v9YcrHhMrUJtZTLZFNCy7KzaMibmK3A0oJ7VptMAVEHSJbPZrUQiaurIuUqeGbHmicW4XWxF0gOlSicZJsYhJZztDg')]",
+               			"//img[contains(@data-src, 'v9YcrHhMrUImfwnxfUv0dcbhWRdlWeMHX05LSv1toCyBEp4n6WwgHicbbTy03EflXJibJ0gomibhazDC4W4Z0mmvQ')]",
+               			"//section[@style='text-align: left;color: rgb(249, 110, 87);font-size: 14px;box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;vertical-align: middle;width: 150.656px;border-top: 0px none rgb(62, 62, 62);border-top-left-radius: 3px;border-left: 0px none rgb(62, 62, 62);border-bottom-left-radius: 3px;box-sizing: border-box;background-image: url(\"https://mmbiz.qpic.cn/mmbiz_png/V6RcLEf64CbXiaib5V4DEa1hJSmxVztKSM8piaEMvjvN1ZlDRfnexiceeDCb3RI0nPcyhr9jfrgfeY41sI9oCUUiajQ/640\");background-attachment: scroll;background-size: 101.088%;background-position: 0% 0%;background-repeat: repeat;']",
+               			"//section[@style='padding-right: 6px;padding-left: 6px;display: inline-block;vertical-align: middle;width: 407.328px;box-sizing: border-box;']",
+               			"//section[@style='padding-bottom: 10px;display: inline-block;width: 541.25px;vertical-align: top;box-shadow: rgb(160, 160, 160) 1px 0px 2px;letter-spacing: 0px;box-sizing: border-box;background-color: rgb(246, 246, 246);']",
+               			"//div[@id='video_container']",
+               			"//div[@class='mod_player_section txp_player_inframe']",
+               			"//iframe",
+               			"//section[@style='display: inline-block;width: 100%;vertical-align: top;border-bottom: 1px dashed rgba(62, 133, 73, 0.95);border-bottom-right-radius: 0px;border-right: 1px dashed rgba(62, 133, 73, 0.95);border-top-right-radius: 0px;border-left-width: 0px;box-sizing: border-box;']"
+               			]
+               	
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src",
+              "multi": true
+              
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "publicName",
+          "fieldExtractorExp": "//div[@class='rich_media_meta_list']/a/text() | //span[@id='profileBt']/a/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "chatNumber",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[1]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "summary",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[2]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//div[@id='meta_content']/em[@id!='post-date' and @class='rich_media_meta rich_media_meta_text']/text()",
+          
+        },
+        {
+          "sourceType": "htmlText",
+          "fieldExtractorType": "html",
+          "fieldName": "headimg",
+          "fieldExtractorExp": "//meta[@property='og:image']/@content"
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "copyright",
+          "fieldExtractorExp": "//span[@id='copyright_logo']/text()"
+
+        },
+        
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [ 
+	"https://mp.weixin.qq.com",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "weixin.sogou.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

@@ -1,0 +1,73 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://climate.nasa.gov/blog/"],
+  "domain": "climate.nasa.gov",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+  "sslm":"oceanEn",
+  "listHrefXPath":"//h1[@class='article_title']/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"NASA",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://climate.nasa.gov/blog/?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='primary_column']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//header[@class='blog_header']",
+               			"//hr",
+               			"//p[@class='comments_directive']",
+               			"//div[@class='fb-comments']",
+               			"//blockquote",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='article_title']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='release_date']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//div[@class='hd--mini hd--mini--sm']/h3[@class='h4']/text()",
+
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://www.tamug.edu/newsroom/"],
+  "domain": "www.tamug.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//h2[@class='entry-title']/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src": "TAMUG",
+  "pagingModel": {
+      "startPage": 2,
+      "endPage": 3,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.tamug.edu/newsroom/index-${page}.html"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='press_release_main_content']/main_content/p",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1/span[@class='headline-underlined']/strong/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='date']/text()",
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,59 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://niwa.co.nz/news"],
+  "domain": "niwa.co.nz",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='field-item even']/h2/a/@href",
+  "newsCategory":"新西兰",
+  "dbType":"news_other",
+  "src": "NIWA",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://niwa.co.nz/news?page=${page}"
+  },
+  "listContentModel": {
+        "title":"//div[@class='view-content']/div[contains(@id,'node-')]/div[@class='field field-name-title field-type-ds field-label-hidden']/div[@class='field-items']/div[@class='field-item even']/h2/a/text()",      // 列表页标题的 xpath
+        "url":"//div[@class='view-content']/div[contains(@id,'node-')]/div[@class='field field-name-title field-type-ds field-label-hidden']/div[@class='field-items']/div[@class='field-item even']/h2/a/@href",         // 列表页 url 的 xpath
+        "pubdate":"//div[@class='view-content']/div[contains(@id,'node-')]/div[@class='field field-name-post-date field-type-ds field-label-hidden']/div[@class='field-items']/div[@class='field-item even']/text()",   // 列表页发布时间的 xpath
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='field field-name-body field-type-text-with-summary field-label-hidden']/div[@class='field-items']/div[@class='field-item even']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//script",
+               			"//img"
+               			]
+          }
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='page-title']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='ds-left column alpha']/div[@class='field field-name-post-date field-type-ds field-label-hidden']/div[@class='field-items']/div[@class='field-item even']/text()",
+        }
+      ]
+    }
+  }
+}

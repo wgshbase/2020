@@ -1,0 +1,65 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://www.jamstec.go.jp/e/about/press_release/index.html"],
+  "domain": "www.jamstec.go.jp",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@id='contents_area']/dl/dd/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"JAMSTEC",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.jamstec.go.jp/e/about/press_release/index.html?${page}"
+  },
+  "listContentModel": {
+      "title":"//div[@id='contents_area']/dl/dd/a/text()",      // 列表页标题的 xpath
+      "url":"//div[@id='contents_area']/dl/dd/a/@href",         // 列表页 url 的 xpath
+      "pubdate":"//div[@id='contents_area']/dl/dt/text()",   // 列表页发布时间的 xpath
+   },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='contents_area']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p[@class='paper']",
+               			"//p[@class='press_contact']",
+               			"//div[@id='press_logo']",
+               			"//div[@id='date_org']",
+               			"//iframe",
+               			"//script",
+               			"//img"
+               			]
+          }
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h3/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@id='date_org']/text()",
+
+        }
+      ]
+    }
+  }
+}

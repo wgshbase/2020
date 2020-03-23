@@ -1,0 +1,92 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36",
+  "pageProcessorModel":"weixin",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "seedRex":"http://weixin.sogou.com/weixin?type=${type}&s_from=input&ie=utf8&query=${query}&_sug_=n&_sug_type_=&w=01019900&sut=4926&sst0=1553594312076&lkt=0,0,0",
+  "indexs":["环球军事热点","国科环宇","航天那些事","知远战略与防务研究所","海鹰资讯","讲武堂","军工圈","军备圈","战略前沿技术","国防网","军武酷","烽火军事","装备参考","北方防务","军民融合产业圈","雷科防务","兵工科技","空天防务观察","新浪军事","国际时事军事","凤凰军事新闻","兵工科技","航天防务","军事热点报导","鹰眼图说军事","全球军情解码","国防科技要闻","凤凰军事解说","铁血军事","局座召忠"],
+  "newsCategory":"微信资讯",
+  "username":"wanggaosheng@bestdatatech.com",
+  "password":"wang13693146553",
+  "dbType":"news_cn",
+  "targetUrlPatterns": [
+        "https://mp.weixin.qq.com/s/*"
+      ],
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_wx_19",
+      "objXpath": "//html",
+      "fileNameRules":["chatNumber","title"],
+      "multi": false,     
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='js_content']",
+          "excludeRegionExp": {
+          		"regex":[
+               			"Uos6BM0urDCQoE61vPeRXoLylroajQnIuRhiarhibsoK26YeRUIr1u8RIzp1ibIy6ksJMd7YHrwySyicf7JB8WWMIg([\\s\\S]*(?=</div>))",
+               			"Uos6BM0urDDs47s4GtVJUoG2Q8vCJYHJsWuZEOJiamZ6l7krKC67nJynGVagibxCicXMKIrIzuyJwU43e1zueSaicQ([\\s\\S]*(?=</div>))",
+               			"5puaLG5r4ab2XruO4MgPnyt7xM6RD504Z3WY64s7Y7olyeHQnibFl2Z6OWbkJeedJUTKpepfN3od87elAq5vlyg([\\s\\S]*(?=</div>))",
+               			"axMnAD4rKSgDUHGLKOpE8RDL63iaKQxarrR1EW1yJkSLLd6Ft96w9Va56M9EzXGkTgzM9grh9zLPCq7DpNW4CUw([\\s\\S]*(?=</div>))",
+               			"axMnAD4rKSgDUHGLKOpE8RDL63iaKQxarlHfZqtgxq7v5ibAGydPbB4ftibYDa9nkvSSESuxzFz47GMsSGicsh2wFg([\\s\\S]*(?=</div>))",
+               			],
+               	"xpath":[
+               			"//iframe",
+               			"//img[contains(@data-src,'axMnAD4rKSgDUHGLKOpE8RDL63iaKQxar9vEz7D0zia3eVhe9oXmZkzbicP6Qo62uUWlFatliaTIOMp6P0oqYGVh4w')]",
+               			]
+               	
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src",
+              "multi": true
+              
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "publicName",
+          "fieldExtractorExp": "//div[@class='rich_media_meta_list']/a/text() | //span[@id='profileBt']/a/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "chatNumber",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[1]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "summary",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[2]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//div[@id='meta_content']/em[@id!='post-date' and @class='rich_media_meta rich_media_meta_text']/text()",
+          
+        }
+        
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [ 
+	"https://mp.weixin.qq.com",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "weixin.sogou.19.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

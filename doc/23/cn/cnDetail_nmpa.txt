@@ -1,0 +1,65 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.nmpa.gov.cn/WS04/CL2076/"],
+  "domain": "www.nmpa.gov.cn",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//td[@class='ListColumnClass15']/a/@href",
+  "newsCategory":"中文新闻",
+  "src":"中国军网",
+  "isPhantomJs":true,
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.nmpa.gov.cn/WS04/CL2076/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='xw_box']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@id='displaypagenum']",
+               			"//div[@id='wxsimgbox']",
+               			"//a",
+               			"//img",
+               			"//video"
+               			]
+          }
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='tit']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@name='PubDate']/@content",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "sourceSite",
+          "fieldExtractorExp": "//span[@class='mr']/text()",
+          
+        }
+      ]
+    }
+  }
+}

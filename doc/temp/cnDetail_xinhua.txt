@@ -1,0 +1,68 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.news.cn/mil/gundong.htm"],
+  "domain": "www.xinhuanet.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefRegex":"http://www\\.xinhuanet\\.com/legal/\\d{4}-\\d{2}/\\d{2}/\\w+\\.htm",  
+  "newsCategory":"中文新闻",
+  "src":"新华军事",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.news.cn/mil/gundong.htm?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_gov",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='p-detail']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='zan-wap']",
+               			"//div[@class='p-tags']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='h-title']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='h-time']/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "sourceSite",
+          "fieldExtractorExp": "//em[@id='source']/text()",
+          
+        }
+      ]
+    }
+  }
+}

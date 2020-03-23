@@ -1,0 +1,72 @@
+﻿{
+  "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36",
+  "pageProcessorModel":"weibo",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "seedRex":"https://s.weibo.com/user?q=${query}&Refer=article_user",
+  "indexs":["战略之页7","河婆大脚ason007","电波震长空XYY","hqy1228","木头军事"],
+  "newsCategory":"微博",
+  "sslm":"A07",
+  "dbType":"news_cn",
+  "targetUrlPatterns": [
+        "https://s.weibo.com/*"
+      ],
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",
+      "objXpath": "//html",
+      "fileNameRules":["chatNumber","title"],
+      "multi": false,     
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='WB_detail']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='WB_info']",
+               			"//div[@class='WB_from S_txt2']",
+               			"//div[@class='PCD_user_b S_bg1']",
+               			"//div[@class='tab']",
+               			"//div[@class='pic_choose_box clearfix']",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true
+              
+            }
+          ]
+        },
+        {
+           "sourceType": "rawtext",
+           "fieldExtractorType": "html",
+           "fieldName": "src",
+           "fieldExtractorExp": "//a[@class='W_f14 W_fb S_txt1']/text()",
+
+         },
+         {
+           "sourceType": "datetext",
+           "fieldExtractorType": "html",
+           "fieldName": "pubDate",
+           "fieldExtractorExp": "//a[@node-type='feed_list_item_date']/@title",
+
+         }
+        
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [ 
+	"https://s.weibo.com/",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "s.weibo.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

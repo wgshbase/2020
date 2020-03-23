@@ -1,0 +1,60 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.stratcom.mil/MEDIA/NEWS-ARTICLES/"],
+  "domain": "www.stratcom.mil",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//span[@class='title']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"U.S. Strategic Command",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 3,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.stratcom.mil/MEDIA/NEWS-ARTICLES/?Page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='body']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='adetail-block']",
+               			"//div[@class='item']/p",
+               			"//div[@class='item']/ul"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@itemprop='headline']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@itemprop='datePublished']/@content",
+        }
+      ]
+    }
+  }
+}

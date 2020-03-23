@@ -1,0 +1,68 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://today.uri.edu/news/"],
+  "domain": "today.uri.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//h2[@class='entry-title']/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"URI TODAY",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://today.uri.edu/news/page/${page}/"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='entry-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='lead-art inline-media']",
+               			"//p[@class='press_contact']",
+               			"//div[@id='press_logo']",
+               			"//div[@id='date_org']",
+               			"//iframe",
+               			"//script",
+               			"//figure",
+               			"//blockquote",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='entry-title']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='posted-on']/time/text()",
+
+        }
+      ]
+    }
+  }
+}

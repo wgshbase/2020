@@ -1,0 +1,59 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.army.mil/news"],
+  "domain": "www.army.mil",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//p[@class='title']/a/@href",  
+  "newsCategory":"美国新闻",
+  "isGoogleSite": true,
+      "isUseProxy":true,
+  "dbType":"news_other",
+  "src":"U.S.ARMY",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.army.mil/news?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='left-column']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='featured-links']",
+               			"//figcaption/span[@class='image-count']",
+               			"//figcaption/span[@class='image-caption-button']",
+               			"//a[@title='View Original']",
+               			"//img"
+               			]
+          }
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='span12']/h1/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='span12']/p[@class='small']/span/text()",
+          
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://www.chinatimes.com/cn/realtimenews/260417"],
+  "domain": "www.chinatimes.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//li[@class='clear-fix']/h2/a/@href",
+  "newsCategory":"中文新闻",
+  "sslm":"A03",
+  "src":"中时网",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.chinatimes.com/cn/realtimenews/260417?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='left']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//header[@class='topich1']",
+               			"//div[@id='div-gpt-ad-1489561879560-0']",
+               			"//div[@id='div-gpt-ad-Content_In-Read']",
+               			"//div[@class='newinfoall']",
+               			"//div[@class='article_info clear-fix']",
+               			"//div[@class='video']",
+               			"//div[@class='promo_word']",
+               			"//div[@class='article-source']",
+               			"//div[@class='nav-below2017 marbotm']",
+               			"//div[@class='mad_gads']",
+               			"//section[@class='ad_carousel_box clear-fix']",
+               			"//section[@class='recommendbox']",
+               			"//div[@class='contentadbox clear-fix']",
+               			"//div[@class='popin_box']",
+               			"//div[@id='comments']",
+               			"//div[@class='fb-comments']",
+               			"//hr"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@id='h1']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='reporter']/time/text()",
+          
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36",
+  "pageProcessorModel":"weixin",
+  "pipelines":["ImgPipeline","NewsDBPipeline","Html2PdfPipeline"],
+  "seedRex":"http://weixin.sogou.com/weixin?type=${type}&s_from=input&ie=utf8&query=${query}",
+  "indexs":["DeepTech深科技"],
+  "newsCategory":"微信资讯",
+  "dbType":"news_cn",
+  "targetUrlPatterns": [
+        "https://mp.weixin.qq.com/s/*"
+      ],
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_wx",
+      "objXpath": "//html",
+      "fileNameRules":["chatNumber","title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='js_content']",
+          "excludeRegionExp": {
+               	"xpath":[
+               			"//qqmusic",
+               			"//iframe",
+               			"//span[@class='db qqmusic_area ']",
+               			"//span[@class='js_audio_frame db']",
+               			"//a[@class='weapp_image_link']",
+               			"//img[@data-ratio='0.029333333333333333']",
+               			"//img[@data-ratio='0.03125']",
+               			"//img[contains(@data-src, 'JJtKEey0hPZMKtTcFiaaia4UmklmykKGLYgAXgmYntiaXIZQ2NryJg7VqbLXEBj3SMVBOVib0GuQVw11yx3JZV4Fqw')]",
+               	],
+                    "regex":[
+                           "我们向您发出这封邀请函([\\s\\S])*(?=</div>)",
+                           "扫码加入DeepTech读书会([\\s\\S])*(?=</div>)",
+                           "扫码即刻加入DeepTech读书会([\\s\\S])*(?=</div>)",
+                           "<img(.*?)JJtKEey0hPZPYe5xUhCIxpFTPXkiaPcbejwkBcYWbSVrrwK4dYcCoTdqdE8gr129WQsHTUV9Fd7qZd8ibIPu4RAw([\\s\\S])*(?=</div>)",
+                           "-End-([\\s\\S])*(?=</div>)",
+                           "- End -([\\s\\S])*(?=</div>)",
+                           "<img([\\s\\S])*扫描上图二维码购票，参与全球新兴科技峰会",
+                           "<img([\\s\\S])*点击上图二维码，参与全球新兴科技峰会",
+                           "<img([\\s\\S])*加入DeepTech读书会听更多科技好书",
+                           "<img([\\s\\S])*点击上图，参与全球新兴科技峰会",
+                    ]
+
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src",
+              "multi": true
+
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "publicName",
+          "fieldExtractorExp": "//div[@class='rich_media_meta_list']/a/text() | //span[@id='profileBt']/a/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "chatNumber",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[1]/span/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "summary",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[2]/span/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//div[@id='meta_content']/em[@id!='post-date' and @class='rich_media_meta rich_media_meta_text']/text()",
+
+        }
+
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [
+	"https://mp.weixin.qq.com",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "weixin.sogou.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

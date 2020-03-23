@@ -1,0 +1,64 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://theindependent.sg/?s=south+sea+of+china"],
+  "domain": "theindependent.sg",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='item-details']/h3/a/@href",
+  "newsCategory":"英国",
+  "dbType":"news_other",
+  "src": "The Independent News",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "http://theindependent.sg/page/${page}/?s=south+sea+of+china"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[contains(@class,'td-post-content')]/div[@class='tdb-block-inner td-fix-index']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//div[@class='td-a-ad id_top_ad']",
+               			"//div[@class='td-a-ad id_inline_ad_content-horiz-center']",
+               			"//div[@class='post-views post-168635 entry-meta']",
+               			"//div[@class='td-a-ad id_bottom_ad']",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='tdb-title-text']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//time/text()",
+        }
+      ]
+    }
+  }
+}

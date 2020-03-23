@@ -1,0 +1,63 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://news.ucar.edu"],
+  "domain": "news.ucar.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//ol[@class='cell post-list']/li/div/h3/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"NCAR UCAR",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://news.ucar.edu/?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//article[@class='content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='post']",
+               			"//iframe",
+               			"//figure",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='cell content']/h1/span/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='date heading-xsmall-normal']/text()",
+
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.marines.mil/News/"],
+  "domain": "www.marines.mil",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//span[@class='title']/a/@href",  
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src":"MARINES",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.marines.mil/News/?Page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@itemtype='http://schema.org/NewsArticle']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='article-task-bar']",
+               			"//ul[@class='article-cal']",
+               			"//span[@class='title']",
+               			"//p[@class='sub-title']",
+               			"//div[@class='tags']",
+               			"//div[@class='media-info-bar']",
+               			"//style"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//span[@itemprop='headline']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@itemprop='datePublished']/@content",
+          
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.news.ucsb.edu/science-technology/environment-sustainability"],
+  "domain": "www.news.ucsb.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@id='content']//span/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src": "UC SANTA BARBARA",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 144,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.news.ucsb.edu/science-technology/environment-sustainability?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='field field-name-body field-type-text-with-summary field-label-hidden view-mode-full']/div[@class='field-items']/div[@class='field-item even']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@id='page-title']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='date-display-single']/text()",
+        }
+      ]
+    }
+  }
+}

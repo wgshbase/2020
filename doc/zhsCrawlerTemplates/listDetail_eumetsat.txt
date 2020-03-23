@@ -1,0 +1,59 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.eumetsat.int/website/home/News/index.html?Y=all&pState=1"],
+  "domain": "www.eumetsat.int",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//ul[@id='galpage']/li/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src":"EUMETSAT",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.eumetsat.int/website/home/News/index.html?Y=all&pState=1&pN=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='content']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//div[@id='content']/h4",
+                        "//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//p[@id='titleSignatureLabel']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@id='content']/h4/text()",
+        }
+      ]
+    }
+  }
+}

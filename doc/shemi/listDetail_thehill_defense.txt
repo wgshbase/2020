@@ -1,0 +1,67 @@
+﻿{
+   "pageProcessorModel":"listAndDetail",
+   "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+   "startURL": [ "https://thehill.com/policy/defense"],
+   "domain": "thehill.com",
+   "retry": 3,
+   "rootPath": "D:/data/webmagic/",
+   "listHrefXPath":"//div[@class='term-section-list']/div/div[@class='view-content']/div/article/header/h2/a/@href",
+   "newsCategory":"美国新闻",
+   "isGoogleSite": true,
+   "isUseProxy":true,
+   "dbType":"news_other",
+   "src":"THEHILL",
+   "pagingModel": {
+       "startPage": 0,
+       "endPage": 4,
+       "pagingType": "rule",
+       "pageNumRules": "https://thehill.com/policy/defense?page=${page}"
+   },
+   "extractorCfgs": {
+     "News": {
+       "objName": "news_en",
+       "objXpath": "//html",
+       "fileNameRules":["title"],
+       "multi": false,
+       "fieldList": [
+         {
+           "sourceType": "newstext",
+           "fieldExtractorType": "html",
+           "fieldName": "content",
+           "fieldExtractorExp": "////article",
+           "excludeRegionExp": {
+                "xpath":[
+                			"//header",
+                			"//div[@class='credits']",
+                			"//div[@class='article-tags']",
+                			"//div[@class='dfp-tag-wrapper wrapper']",
+                			"//div[@id='bottom-story-socials']",
+                			"//iframe"
+                			]
+           },
+           "innerFileConfigs": [
+             {
+               "resourceName": "image",
+               "resourceRegionExp": "//img/@data-src | //img/@src",
+               "multi": true,
+             }
+           ]
+         },
+         {
+           "sourceType": "rawtext",
+           "fieldExtractorType": "html",
+           "fieldName": "title",
+           "fieldExtractorExp": "//h1[@class='title']/text()",
+
+         },
+         {
+           "sourceType": "datetext",
+           "fieldExtractorType": "html",
+           "fieldName": "pubDate",
+           "fieldExtractorExp": "//span[@class='submitted-date']/text()",
+
+         }
+       ]
+     }
+   }
+ }

@@ -1,0 +1,67 @@
+﻿{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+  "pageProcessorModel":"batchUrls",
+  "pipelines":["NewsDBPipeline"],
+  "indexFile":"D:/workspace/product/BSCrawler/doc/crawlerConfigex/index_cn.txt",
+ "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='b-article']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//div[@class='b-article__refs-text']",
+                        "//div[@class='b-article__refs-text ']",
+                        "//div[@class='b-article__meta']",
+                        "//div[@class='b-banner m-banner-33 m-mb20 m-mt10']",
+                        "//div[@class='social-likes-pane__holder']",
+                        "//div[@class='b-article__likes js-likes']",
+                        "//div[@class='taboola-banner']",
+                        "//div[@class='b-article__refs']",
+                        "//div[@class='taboola-banner']",
+                        "//div[@class='comments section']",
+                        "//div[@class=' tbl-feed-container tbl-feed-full-width ']",
+                        "//div[@class=' tbl-feed-container tbl-feed-full-width ']",
+                        "//section[@class='comments']",
+                        "//div[@id='share']",
+                        "//div[@class='b-inject__copy']"
+                        "//img"
+                        ]
+          }
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='b-article__header-title ']/h1/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//time[@class='b-article__refs-date']/text()",
+
+        }
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [ 
+	"http://baijiahao.baidu.com/", 
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "sputniknews.cn",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

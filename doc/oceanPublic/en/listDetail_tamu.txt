@@ -1,0 +1,61 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://today.tamu.edu/press-room/"],
+  "domain": "www.tamu.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+  "sslm":"oceanEn",
+  "listHrefXPath":"//span[@class='headline-group__head']/span/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"TAMU",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 10,
+      "pagingType": "rule",
+      "pageNumRules": "https://today.tamu.edu/page/${page}/?s=ocean&branch=Search+News"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='editorial ']/div[@class='editorial__content']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//iframe",
+                        "//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//span[@class='heading__text']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@property='article:published_time']/@content",
+        }
+      ]
+    }
+  }
+}

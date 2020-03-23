@@ -1,0 +1,66 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://weapon.huanqiu.com/weaponlist/guns/list_0_"],
+  "domain": "weapon.huanqiu.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//span[@class='name']/a/@href",  
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 81,
+      "pagingType": "rule",
+      "pageNumRules": "http://weapon.huanqiu.com/weaponlist/guns/list_0_0_0_0_${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "weapons_guns",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='detail clearfix']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='tuijian']",
+               			"//div[@class='loadComment']",
+               			"//span[@class='country']/b/a/img",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//div[@class='maxPic']/img/@src | //div[@class='dataInfo']/img/@src",
+              "multi": false,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='maxPic']/span[@class='name']/text() | //div[@class='maxNoPic']/span[@class='name']/text()",
+          
+        },
+        {
+          "sourceType": "json",
+          "fieldExtractorType": "html",
+          "fieldName": "jsoninfo",
+          "fieldExtractorExp": "//div[@class='dataInfo']",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "country",
+          "fieldExtractorExp": "//span[@class='country']/b/a/text()",
+          
+        }
+      ]
+    }
+  }
+}

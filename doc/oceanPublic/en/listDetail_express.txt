@@ -1,0 +1,68 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.express.co.uk/search?s=south+sea+of+china"],
+  "domain": "www.express.co.uk",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//a[@class='result-item']/@href",
+  "newsCategory":"英国",
+  "dbType":"news_other",
+  "src": "EXPRESS",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "step":10,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.express.co.uk/search?s=south+sea+of+china&0=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='clearfix hR new-style']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//div[@class='p402_hide htmlappend']",
+               			"//div[@class='box two-related-articles clear']",
+               			"//div[contains(@class,'box two-related-articles clear')]",
+               			"//a",
+               			"//div[@class='photo changeSpace']",
+               			"//div[@class='td-a-ad id_bottom_ad']",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@itemprop='headline']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@property='article:published_time']/@content",
+        }
+      ]
+    }
+  }
+}

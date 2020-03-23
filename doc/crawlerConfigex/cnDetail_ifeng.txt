@@ -1,0 +1,66 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://mil.ifeng.com/shanklist/14-35083-"],
+  "domain": "news.ifeng.com",
+  "retry": 3,
+  "charset":"UTF-8",
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//ul[@class='news-stream-basic-news-list']/li/div/h2/a/@href",
+  "newsCategory":"中文新闻",
+  "isPhantomJs":true,
+  "dbType":"news_cn",  
+  "src":"凤凰网",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://mil.ifeng.com/shanklist/14-35083-?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='main_content-LcrEruCc']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@id='embed_hzh_div']",
+               			"//div[@class='video_box ss_none ipad_block iphone_block']",
+               			"//span[@class='ifengLogo']",
+               			"//audio[@controls='controls']",
+               			"//div[@class='box02']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='topic-3bY8Hw-9']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@name='og:time ']/@content | //p[@class='time-hm3v7ddj']/span/text()",
+          
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://www.world-nuclear-news.org/"],
+  "domain": "www.world-nuclear-news.org",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='col-md-4 article']/h2/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src": "World Nuclear News",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.world-nuclear-news.org/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='col-md-8 ArticleBody']",
+          "excludeRegionExp": {
+                 "xpath":[
+                            "//div[@class='ShareTop']",
+                            "//h1",
+                            "//p[@class='tiny']",
+                            "//h2[@class='orange Related']",
+                            "//div[@class='RelatedTopics']",
+                            "//div[@class='ShareButtons']",
+                            "//hr[@class='seperatorLine']"
+                            ]
+            },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "htmltext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='col-md-8 ArticleBody']/h1",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='col-md-8 ArticleBody']/p[1]/text()",
+          
+        }
+      ]
+    }
+  }
+}

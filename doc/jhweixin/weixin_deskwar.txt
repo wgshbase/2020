@@ -1,0 +1,101 @@
+﻿{
+  "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36",
+  "pageProcessorModel":"weixin",
+  "pipelines":["ImgPipeline","NewsDBPipeline","Html2PdfPipeline"],
+  "seedRex":"http://weixin.sogou.com/weixin?type=${type}&s_from=input&ie=utf8&query=${query}",
+  "indexs":["桌面战争"],
+  "newsCategory":"微信资讯",
+  "dbType":"news_cn",
+  "targetUrlPatterns": [
+        "https://mp.weixin.qq.com/s/*"
+      ],
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_wx",      
+      "objXpath": "//html",
+      "fileNameRules":["chatNumber","title"],
+      "multi": false,     
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='js_content']",
+          "excludeRegionExp": {
+               	"xpath":[
+               			"//section[@style='text-align: justify;padding-right: 5px;padding-left: 5px;color: rgb(255, 255, 255);box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;vertical-align: middle;width: 73%;padding-right: 6px;padding-left: 6px;box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;width: 100%;vertical-align: top;padding-right: 10px;padding-left: 10px;border: 1px dashed rgb(62, 62, 62);border-radius: 0px;box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;width: 100%;vertical-align: top;padding-right: 10px;padding-left: 10px;border-style: dashed;border-width: 1px;border-radius: 0px;border-color: rgb(62, 62, 62);box-sizing: border-box;']",
+               			"//section[@style='max-width: 100%;vertical-align: middle;display: inline-block;width: 100%;box-sizing: border-box;']",
+               			"//section[@style='margin: 10px;box-sizing: border-box;']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUKUzVd9YxjBxbOP2cpjaRicjz0ZwQmETuuy0NxaebqxCSQGeHEgYhAZicWoTrJvoqWxOLe2StM1l0bw/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUJOic0z2XR6MBB0qlFziciccQcpZv4RYNSzxvpGdoW1yUeTerHxxzOBywgiayAPn1mNlO0uXUKu3HuKhg/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrULmgdvPibuRXqzwxE5GS6dRgLx0BuqZjPFMUpWCTgmvSZM3w6z15PHWgMiabza70EwITH1ejnQlR1MQ/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/v9YcrHhMrUKhcKxRJ9D9c1TQRItTdA4pAubBglvIVeiah9arv75ibZvID6tkScBuLI1sjl69ObgMwFWAxk9DzxGQ/640?wx_fmt=jpeg']",
+               			"//img[@data-src='https://mmbiz.qpic.cn/mmbiz_jpg/jibtPMwZ5MWMaCLWVa10nqcYYt4ibscNbUnTe7bJ31Jg699AefhROkZL6k2P6w5ia3HPXicMVScVU6tBkvqDibD013g/640?wx_fmt=jpeg']",
+               			"//img[@data-ratio='0.1783681']",
+               			"//img[@data-ratio='0.66796875']",
+               			"//section[@style='text-align: left;color: rgb(249, 110, 87);font-size: 14px;box-sizing: border-box;']",
+               			"//section[@style='display: inline-block;vertical-align: middle;width: 150.656px;border-top: 0px none rgb(62, 62, 62);border-top-left-radius: 3px;border-left: 0px none rgb(62, 62, 62);border-bottom-left-radius: 3px;box-sizing: border-box;background-image: url(\"https://mmbiz.qpic.cn/mmbiz_png/V6RcLEf64CbXiaib5V4DEa1hJSmxVztKSM8piaEMvjvN1ZlDRfnexiceeDCb3RI0nPcyhr9jfrgfeY41sI9oCUUiajQ/640\");background-attachment: scroll;background-size: 101.088%;background-position: 0% 0%;background-repeat: repeat;']",
+               			"//section[@style='padding-right: 6px;padding-left: 6px;display: inline-block;vertical-align: middle;width: 407.328px;box-sizing: border-box;']",
+               			"//section[@style='padding-bottom: 10px;display: inline-block;width: 541.25px;vertical-align: top;box-shadow: rgb(160, 160, 160) 1px 0px 2px;letter-spacing: 0px;box-sizing: border-box;background-color: rgb(246, 246, 246);']",
+               			"//div[@id='video_container']",
+               			"//div[@class='mod_player_section txp_player_inframe']",
+               			"//iframe"
+               			]
+               	
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src",
+              "multi": true
+              
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "publicName",
+          "fieldExtractorExp": "//div[@class='rich_media_meta_list']/a/text() | //span[@id='profileBt']/a/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "chatNumber",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[1]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "summary",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[2]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//div[@id='meta_content']/em[@id!='post-date' and @class='rich_media_meta rich_media_meta_text']/text()",
+          
+        }
+        
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [ 
+	"https://mp.weixin.qq.com",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "weixin.sogou.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

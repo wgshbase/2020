@@ -1,0 +1,74 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.swims.hku.hk/news/"],
+  "domain": "www.swims.hku.hk",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='news_details']/h2/a/@href",
+  "newsCategory":"中国",
+  "dbType":"news_other",
+  "src":"SWIMS",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.swims.hku.hk/news/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='flex_column av_two_third  flex_column_div first  avia-builder-el-0  el_before_av_one_third  avia-builder-el-first  ']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//section[@itemprop='blogPost']/div/h3",
+               			"//div[@class='av-special-heading av-special-heading-h1  blockquote modern-quote  avia-builder-el-2  el_after_av_textblock  el_before_av_textblock  headline-margin ']",
+               			"//section[@itemprop='blogPost']/div[@style='font-size:12px; ']",
+               			"//div[@class='avia_textblock sub-header ']",
+               			"//div[@class='avia-content-slider-inner']",
+               			"//iframe",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@itemprop='headline']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//meta[@property='article:published_time']/@content",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='author url fn']/text()",
+
+        }
+      ]
+    }
+  }
+}

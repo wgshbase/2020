@@ -1,0 +1,61 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://aos.princeton.edu/news"],
+  "domain": "aos.princeton.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='views-field views-field-title']/span/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"PRINCETON",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://aos.princeton.edu/news?&&uid=&field_news_author_title=&sort_order=DESC&sort_by=field_news_date_value&page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='field-item even']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@id='page-title']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='date-display-single']/text()",
+
+        }
+      ]
+    }
+  }
+}

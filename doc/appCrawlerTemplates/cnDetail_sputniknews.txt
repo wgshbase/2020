@@ -1,0 +1,70 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://sputniknews.cn/military/"],
+  "domain": "sputniknews.cn",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//li[@class='b-stories__item']/a/@href",
+  "newsCategory":"中文新闻",
+  "src":"俄罗斯卫星通信社",
+  "sslm":"A04",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://sputniknews.cn/military/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='b-article']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='b-article__refs-text']",
+               			"//div[@class='b-banner m-banner-33 m-mb20 m-mt10']",
+               			"//div[@class='social-likes-pane__holder']",
+               			"//div[@class='b-article__likes js-likes']",
+               			"//div[@class='taboola-banner']",
+               			"//div[@class='b-article__refs']",
+               			"//div[@class=' tbl-feed-container tbl-feed-full-width ']",
+               			"//section[@class='comments']",
+               			"//div[@id='share']",
+               			"//div[@class='b-inject__copy']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='b-article__header-title ']/h1/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//time[@class='b-article__refs-date']/text()",
+          
+        }
+      ]
+    }
+  }
+}

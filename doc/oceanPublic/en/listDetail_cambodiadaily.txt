@@ -1,0 +1,60 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://english.cambodiadaily.com/environment/"],
+  "domain": "english.cambodiadaily.com",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+  "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='td_module_16 td_module_wrap td-animation-stack']/div[@class='item-details']/h3[@class='entry-title td-module-title']/a/@href",
+  "newsCategory":"柬埔寨",
+  "dbType":"news_other",
+  "src": "THE CAMBODIA DAILY",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 17,
+      "pagingType": "rule",
+      "pageNumRules": "https://english.cambodiadaily.com/environment/page/${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='td-post-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='entry-title']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='td-post-date td-post-date-no-dot']/time[@class='entry-date updated td-module-date']/text()",
+        }
+      ]
+    }
+  }
+}

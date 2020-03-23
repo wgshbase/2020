@@ -1,0 +1,57 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "http://www.spacelaunchreport.com/"],
+  "domain": "www.spacelaunchreport.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//table[@width='100%']//font[@face='Arial']/a/@href",
+  "newsCategory":"美国新闻",
+  "isGoogleSite": true,
+    "isUseProxy":true,
+  "dbType":"news_other",
+  "src":"www.spacelaunchreport.com",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.spacelaunchreport.com/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//body/div/center/table/tbody/tr[3]",
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//tt/font/text() | //table/tbody/tr[1]/td/b/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "html/body/div[1]/center/table/tbody/tr[3]/td/p/font[@face='Arial']/text()",
+          
+        }
+      ]
+    }
+  }
+}

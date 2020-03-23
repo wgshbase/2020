@@ -1,0 +1,77 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.whoi.edu/press-room/whoi-in-the-news/"],
+  "domain": "www.whoi.edu",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//h2[@itemprop='headline']/a/@href",
+  "newsCategory":"美国",
+  "dbType":"news_other",
+  "src":"WHOI",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.whoi.edu/press-room/whoi-in-the-news/?${page}"
+  },
+  "listContentModel": {
+       "title":"//h2[@itemprop='headline']/a/text()",
+       "url":"//h2[@itemprop='headline']/a/@href",
+       "pubdate":"//span[@class='fl-post-date']/text()",
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='article-body'] | //div[@class='article-fulltext'] | //body",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='author-title']",
+               			"//div[@class='image-slider-holder shifted-to-left']",
+               			"//div[@id='trendmd-suggestions']",
+               			"//iframe",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//title/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//h1/span[@class='info-line']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='author url fn']/text()",
+
+        }
+      ]
+    }
+  }
+}

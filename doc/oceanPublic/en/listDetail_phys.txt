@@ -1,0 +1,67 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://phys.org/earth-news/sort/date/all/"],
+  "domain": "phys.org",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//a[@class='news-link']/@href",
+  "newsCategory":"欧盟",
+  "dbType":"news_other",
+  "src": "PHYS ORG",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://phys.org/earth-news/sort/date/all/page${page}.html"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='mt-4 article-main']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//section[@class='article-banner first-banner']",
+               			"//div[@class='w-100 mb-4 ads']",
+               			"//div[@class='article-main__explore my-4 d-print-none']",
+               			"//hr[@class='mb-4 ']",
+               			"//div[@class='article-main__more p-4']",
+               			"//div[@class='d-inline-block text-medium my-4']",
+               			"//div[@class='d-none d-print-block']",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='text-extra-large line-low mb-2']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='article__info mb-2']/div[@class='article__info-item mr-auto']/p[@class='text-uppercase text-low']/text()",
+        }
+      ]
+    }
+  }
+}

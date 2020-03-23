@@ -1,0 +1,93 @@
+﻿{
+  "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36",
+  "pageProcessorModel":"weixin",
+  "pipelines":["ImgPipeline","NewsDBPipeline","Html2PdfPipeline"],
+  "seedRex":"http://weixin.sogou.com/weixin?type=${type}&s_from=input&ie=utf8&query=${query}",
+  "indexs":["卫星应用"],
+  "newsCategory":"微信资讯",
+  "dbType":"news_cn",
+  "targetUrlPatterns": [
+        "https://mp.weixin.qq.com/s/*"
+      ],
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_wx",      
+      "objXpath": "//html",
+      "fileNameRules":["chatNumber","title"],
+      "multi": false,     
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='js_content']",
+          "excludeRegionExp": {
+               	"xpath":[
+               			"//qqmusic",
+               			"//iframe",
+               			"//span[@class='db qqmusic_area ']",
+               			"//span[@class='js_audio_frame db']",
+               			"//section[@style='text-align: center;margin: 10px 0%;box-sizing: border-box;']"
+               	],
+               	"regex":[
+                          "<img(.*?)EiapGtLIATSkVoy4RQtXJ8evkAkZjmF4TbBxmUFcrguT1kYWJde5jiaQghlzZ4wBqdLsacmUQwvFHHv0yJ6ibGHcQ([\\s\\S])*(?=</div>)",
+                          "<img(.*?)EiapGtLIATSkVoy4RQtXJ8evkAkZjmF4TacADoF2uHEcc2z72ibJteE4qB6MOAI2FxTLibz2tdMMXiazTqvqPdMiaNg([\\s\\S])*(?=</div>)",
+                          "<img(.*?)EiapGtLIATSmmp21vJO0BFdX9huqaTaDxdrmDOZYrjRNX1XZLK8PzHArVrBh4J9JB83D0ulFluI60WeL5mTibdfw([\\s\\S])*(?=</div>)",
+                          "<img(.*?)EiapGtLIATSmmp21vJO0BFdX9huqaTaDxdrmDOZYrjRNX1XZLK8PzHArVrBh4J9JB83D0ulFluI60WeL5mTibdfw([\\s\\S])*(?=</div>)",
+                          "<img(.*?)EiapGtLIATSmrEibzwdEuqRV3cqiaoY8TGAfMxmice9Psbk2rJWYFzzRVFWJgfxHQ1MP8GedDQkKib2XWaPYWAnQQyw([\\s\\S])*(?=</div>)",
+               	]
+
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src",
+              "multi": true
+              
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "publicName",
+          "fieldExtractorExp": "//div[@class='rich_media_meta_list']/a/text() | //span[@id='profileBt']/a/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "chatNumber",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[1]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "summary",
+          "fieldExtractorExp": "//div[@id='js_profile_qrcode']/div[@class='profile_inner']/p[2]/span/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//div[@id='meta_content']/em[@id!='post-date' and @class='rich_media_meta rich_media_meta_text']/text()",
+          
+        }
+        
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [ 
+	"https://mp.weixin.qq.com",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "weixin.sogou.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

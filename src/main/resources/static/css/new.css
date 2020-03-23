@@ -1,0 +1,39 @@
+#content_main{
+	clear:both;
+}
+.con-eng, .con-chin{
+	float:right;
+	width:50%;
+}
+.con-eng{
+	width:47%;
+    padding-left:95px;
+    border-left:2px solid #ccc;
+}
+.con-chin{
+	float:left;
+	width:49%;
+}
+.modal-footer{
+	clear:both;
+}
+.img_x{
+	margin:10px;
+	margin-right:0;
+	width:40%;
+	height:auto;
+	float:right;
+}
+.img_x img{
+	width:100%;
+	height:auto;
+}
+
+.con-eng img{
+    width:80%;
+    height:80%;
+}
+.con-chin img{
+	width:80%;
+	height:80%;
+}

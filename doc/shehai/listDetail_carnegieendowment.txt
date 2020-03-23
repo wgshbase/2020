@@ -1,0 +1,62 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://carnegieeurope.eu/publications?lang=en#analysis"],
+  "domain": "carnegieeurope.eu",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//li[@class='clearfix']/h4/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"CARNEGIE EUROPE",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://carnegieeurope.eu/publications/search-results?fltr=&maxrow=20&tabName=pubs&channel=&lang=en&pageOn=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='article-body']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//p[@class='selectionShareable']/a",
+               			"//iframe",
+               			"//div[@class='author-box no-print']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src | //img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='headline']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='post-date col col-25']/ul[@class='clean-list']/li[1]/text()",
+          
+        }
+      ]
+    }
+  }
+}

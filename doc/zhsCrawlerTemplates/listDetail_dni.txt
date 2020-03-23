@@ -1,0 +1,62 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.dni.gov/index.php/newsroom/recent-news"],
+  "domain": "www.dni.gov",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//div[@class='catItemReadMore']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"Director of  National Intelligence",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 3,
+      "pagingType": "rule",
+      "step": 5,
+      "pageNumRules": "https://www.dni.gov/index.php/newsroom/recent-news?start=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='itemBody']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='clr']",
+               			],
+               "regex":[
+                        "Read the full story on([\\s\\S])*(?=</div>)"
+                        ]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h2[@class='text-uppercase articleTitle']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='itemDateCreated']/text()",
+        }
+      ]
+    }
+  }
+}

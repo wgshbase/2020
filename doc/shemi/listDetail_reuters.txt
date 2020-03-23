@@ -1,0 +1,59 @@
+﻿{
+   "pageProcessorModel":"listAndDetail",
+   "pipelines":["NewsTranslate2DBPipeline"],
+   "startURL": [ "https://www.reuters.com/politics"],
+   "domain": "www.reuters.com",
+   "retry": 3,
+   "rootPath": "D:/data/webmagic/",
+   "listHrefXPath":"//h2[@class='FeedItemHeadline_headline FeedItemHeadline_full']/a/@href",
+   "newsCategory":"美国新闻",
+    "isGoogleSite": true,
+       "isUseProxy":true,
+   "dbType":"news_other",
+   "src":"REUTERS",
+   "pagingModel": {
+       "startPage": 1,
+       "endPage": 1,
+       "pagingType": "rule",
+       "pageNumRules": "https://www.reuters.com/politics?${page}"
+   },
+   "extractorCfgs": {
+     "News": {
+       "objName": "news_en",
+       "objXpath": "//html",
+       "fileNameRules":["title"],
+       "multi": false,
+       "fieldList": [
+         {
+           "sourceType": "newstext",
+           "fieldExtractorType": "html",
+           "fieldName": "content",
+           "fieldExtractorExp": "//div[@class='StandardArticleBody_body']",
+           "excludeRegionExp": {
+                "xpath":[
+                			"//div[@class='RelatedCoverage_related-coverage-module module']",
+                			"//div[@class='Image_container']",
+                			"//div[@class='Attribution_container']",
+                			"//div[@class='StandardArticleBody_trustBadgeContainer']",
+                			"//iframe"
+                			]
+           }
+         },
+         {
+           "sourceType": "rawtext",
+           "fieldExtractorType": "html",
+           "fieldName": "title",
+           "fieldExtractorExp": "//h1[@class='ArticleHeader_headline']/text()",
+
+         },
+         {
+           "sourceType": "datetext",
+           "fieldExtractorType": "html",
+           "fieldName": "pubDate",
+           "fieldExtractorExp": "//div[@class='ArticleHeader_date']/text()",
+
+         }
+       ]
+     }
+   }
+ }

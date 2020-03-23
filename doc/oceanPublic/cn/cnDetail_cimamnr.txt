@@ -1,0 +1,65 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://www.cimamnr.org.cn/"],
+  "domain": "www.cimamnr.org.cn",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//h3[@class='sr-title']/a/@href",
+  "src":"海洋发展战略研究所",
+  "newsCategory":"中国",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "http://www.cimamnr.org.cn/search?q=%E6%B5%B7%E6%B4%8B&page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='font-family-fs font-size-1-15 mt-4 pt-3']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//video",
+               			"//style",
+               			"//p[@class='dark-grey-text article text-indent']",
+               			"//p[@class='text-align:center;text-indent:32px']",
+               			]
+          },
+         "innerFileConfigs": [
+           {
+             "resourceName": "image",
+             "resourceRegionExp": "//img/@src",
+             "multi": true,
+           }
+         ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h2[@class='section-heading pt-4 mb-3']//strong/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='font-small grey-text mb-0 ml-3']/text()",
+
+        }
+      ]
+    }
+  }
+}

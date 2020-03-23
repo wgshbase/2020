@@ -1,0 +1,59 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.weather.gov/news/"],
+  "domain": "www.weather.gov",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//p[@class='archive']/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src":"NATIONAL WEATHER SERVICE",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 3,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.weather.gov/news/?Page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='panels-flexible-row panels-flexible-row-new-1 clearfix content-row'] | //div[@class='cms-content']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//span[@class='date-published']",
+               			"//iframe",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src | //img/@data-src",
+              "multi": true,
+            },
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='pane-content']/h1/text() | //h1[@class='location-pagetitle']/text()",
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='date-published']/text() | //meta[@name='DC.date.created']/@content",
+        }
+      ]
+    }
+  }
+}

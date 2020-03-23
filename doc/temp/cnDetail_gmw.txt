@@ -1,0 +1,62 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "http://legal.gmw.cn/node_9020.htm"],
+  "domain": "legal.gmw.cn",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//ul[@class='channel-newsGroup']/li/a/@href",  
+  "newsCategory":"中文新闻",
+  "src":"光明网法制",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "http://legal.gmw.cn/node_9020.htm?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_gov",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='u-mainText'] | //div[@class='contentMain']",
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='u-title']/text() | //h1[@id='articleTitle']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='m-con-time']/text() | //span[@id='pubTime']/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "sourceSite",
+          "fieldExtractorExp": "//span[@class='m-con-source']/a/text()",
+          
+        }
+      ]
+    }
+  }
+}

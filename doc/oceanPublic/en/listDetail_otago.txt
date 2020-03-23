@@ -1,0 +1,55 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.otago.ac.nz/"],
+  "domain": "www.otago.ac",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+  "sslm":"oceanEn",
+  "listHrefXPath":"//div[@id='organicresults']/div/h3/a/@href",
+  "newsCategory":"新西兰",
+  "dbType":"news_other",
+  "src":"OTAGO",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 12,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.otago.ac.nz/search/?q=ocean&btnG=&page="+${page}
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@id='contentwrapper']/div[@id='content']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//iframe",
+                        "//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='notopimage']/text()",
+
+        }
+      ]
+    }
+  }
+}

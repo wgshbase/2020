@@ -1,0 +1,63 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://www.qichacha.com/search?key=%E6%B8%94%E4%B8%9A"],
+  "domain": "www.xinhuanet.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXpath":"//tbody[@id='search-result']/tr/td[3]/a/@href",
+  "newsCategory":"中文新闻",
+  "src":"新华军事",
+  "isPhantomJs":true,
+  "charset":"GB2312",
+  "dbType":"news_cn",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 5,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.qichacha.com/search?key=%E6%B8%94%E4%B8%9A#p:${page}&"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//table[@class='ntable']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='zan-wap']",
+               			"//div[@class='p-tags']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='row title jk-tip']/h1/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='h-time']/text()",
+          
+        }
+      ]
+    }
+  }
+}

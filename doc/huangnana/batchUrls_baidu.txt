@@ -1,0 +1,70 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+  "pageProcessorModel":"batchUrls",
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "indexFile":"D:/workspace/product/BSCrawler/doc/huangnana/index_baidu.txt",
+ "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='main-content']",
+          "excludeRegionExp": {
+               "xpath":[
+                        "//a[@class='posterFlag expert-icon ']",
+                        "//iframe",
+                        "//div[@class='top-tool']",
+                        "//dl[@class='lemmaWgt-lemmaTitle lemmaWgt-lemmaTitle-']",
+                        "//dl[@class='lemma-reference collapse nslog-area log-set-param']",
+                        "//div[@class='authorityListPrompt']",
+                        "//div[@class='album-list']",
+                        "//div[@class='anchor-list']",
+                        "//div[@class='promotion-declaration']",
+                        "//div[@class='lemmaWgt-lemmaCatalog']",
+                        "//div[@id='open-tag']",
+                        "//div[@class='clear']"
+                        ]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//dd[@class='lemmaWgt-lemmaTitle-title']/h1/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@id='news-time']/text()",
+
+        }
+      ]
+    }
+  },
+  "saveCapture": true,
+  "sleep": 5000,
+  "startURL": [
+	"http://weixin.sogou.com/",
+  ],
+  "priority": 0,
+  "thread": 1,
+  "domain": "weixin.sogou.com",
+  "retry": 2,
+  "rootPath": "D:/data/webmagic/",
+  "timeout": 5000
+}

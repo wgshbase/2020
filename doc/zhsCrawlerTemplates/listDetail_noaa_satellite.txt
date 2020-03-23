@@ -1,0 +1,66 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.nesdis.noaa.gov/news-articles-archive"],
+  "domain": "www.nesdis.noaa.gov",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//div[@class='views-field views-field-title']/span/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src": "National Oceanic and Atmospheric Administration",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.nesdis.noaa.gov/news-articles-archive?page=${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//article",
+          "excludeRegionExp": {
+                 "xpath":[
+                            "//header",
+                            "//div[@class='field-date']",
+                            "//iframe",
+                            "//video"
+                            ],
+                 "regex":[
+                            "Test Yourself!([\\s\\S])*(?=</div>)"
+                        ]
+            },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='news-articles-heading']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//span[@class='date-display-single']/@content",
+
+        }
+      ]
+    }
+  }
+}

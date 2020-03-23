@@ -1,0 +1,79 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.google.com/search?gbv=1&tbm=nws&q=Marine+electronic+information&oq=&aqs="],
+  "domain": "www.google.com",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+    "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='ZINbbc xpd O9g5cc uUPGi']/div[1]/a/@href",
+  "newsCategory":"美国",
+  "isGoogleSite": true,
+  "isUseProxy":true,
+  "dbType":"news_other",
+  "src":"GOOGLE",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.google.com/search?gbv=1&tbm=nws&q=Marine+electronic+information&oq=&aqs=?${page}"
+  },
+  "listContentModel": {
+       "title":"//div[@class='ZINbbc xpd O9g5cc uUPGi']/div[1]/a/div[1]/text()",
+       "url":"//div[@class='ZINbbc xpd O9g5cc uUPGi']/div[1]/a/@href",
+       "pubdate":"//span[@class='fl-post-date']/text()",
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//body",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='author-title']",
+               			"//div[@class='image-slider-holder shifted-to-left']",
+               			"//div[@id='trendmd-suggestions']",
+               			"//iframe",
+               			"//script"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='ZINbbc xpd O9g5cc uUPGi']/div[1]/a/div[1]/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//h1/span[@class='info-line']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='author url fn']/text()",
+
+        }
+      ]
+    }
+  }
+}

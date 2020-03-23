@@ -1,0 +1,62 @@
+spiderConfig:
+    esHost: localhost
+    esPort: 9300
+    esClusterName: elasticsearch
+    commonsIndex: commons
+    maxHttpDownloadLength: 1048576
+    commonsSpiderDebug: false
+    taskDeleteDelay: 1
+    taskDeletePeriod: 2
+    limitOfCommonWebpageDownloadQueue: 100000
+    needRedis: false
+    needEs: true
+    redisPort: 6379
+    redisHost: localhost
+    webpageRedisPublishChannelName: webpage
+    commonsWebpageCrawlRatio: 2
+    ajaxDownloader: http://localhost:7788/
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        druid:
+            first:  #数据源1
+                url: jdbc:mysql://127.0.0.1:3306/scawler?allowMultiQueries=true
+                username: root
+                password: 123123
+            second:  #数据源2
+                url: jdbc:mysql://127.0.0.1:3306/scawler?allowMultiQueries=true
+                username: root
+                password: 123123
+            initial-size: 10
+            max-active: 100
+            min-idle: 10
+            max-wait: 60000
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            validation-query: SELECT 1 FROM DUAL
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+            # 空闲的数据库链接是否进行判断
+            test-while-idle: true
+            # 返回的数据库链接是否进行判断
+            test-on-return: true
+            # 取出的数据库链接是否进行判断
+            test-on-borrow: true
+            # 回收被遗忘的数据库链接到数据库连接池中
+            remove-abandoned: true
+            # 数据库链接多长时间不使用将事务遗忘而回收到数据库连接池
+            remove-abandoned-timeout: 180

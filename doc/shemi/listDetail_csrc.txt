@@ -1,0 +1,63 @@
+﻿{
+   "pageProcessorModel":"listAndDetail",
+   "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+   "startURL": [ "https://csrc.nist.gov/News"],
+   "domain": "csrc.nist.gov",
+   "retry": 3,
+   "rootPath": "D:/data/webmagic/",
+   "listHrefXPath":"//div[@class='col-sm-12 news-list-title']/strong/a/@href",
+   "newsCategory":"美国新闻",
+   "dbType":"news_other",
+   "isPhantomJs":true,
+   "src":"NIST",
+   "pagingModel": {
+       "startPage": 1,
+       "endPage": 1,
+       "pagingType": "rule",
+       "pageNumRules": "https://csrc.nist.gov/News?page=${page}"
+   },
+   "extractorCfgs": {
+     "News": {
+       "objName": "news_en",
+       "objXpath": "//html",
+       "fileNameRules":["title"],
+       "multi": false,
+       "fieldList": [
+         {
+           "sourceType": "newstext",
+           "fieldExtractorType": "html",
+           "fieldName": "content",
+           "fieldExtractorExp": "//div[@id='news-content']",
+           "innerFileConfigs": [
+             {
+               "resourceName": "image",
+               "resourceRegionExp": "//img/@data-src | //img/@src",
+               "multi": true,
+             },
+             {
+                "resourceName": "pdf",
+                "resourceRegionExp": "//a[@data-csrc-pub-link='true']/@href",
+                "targetUrlPattern": "//a[contains(text(),'Local Down')]",
+                "targetFileName":"//span[@id='pub-header-full-display']",
+                "multi": false,
+              }
+           ]
+         },
+         {
+           "sourceType": "rawtext",
+           "fieldExtractorType": "html",
+           "fieldName": "title",
+           "fieldExtractorExp": "//h1[@id='news-title']/text()",
+
+         },
+         {
+           "sourceType": "datetext",
+           "fieldExtractorType": "html",
+           "fieldName": "pubDate",
+           "fieldExtractorExp": "//small[@id='news-date']/text()",
+
+         },
+       ]
+     }
+   }
+ }

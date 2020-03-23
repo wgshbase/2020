@@ -1,0 +1,71 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.militaryaerospace.com/communications"],
+  "domain": "www.militaryaerospace.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//div[@class='item__contents']/h5/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src": "Military Aerospace",
+  "pagingModel": {
+      "startPage": 2,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.militaryaerospace.com/communications?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//div[@class='col-lg-8']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@class='ad-wrapper ']",
+               			"//div[@class='sponsoredArticle']",
+               			"//iframe"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='page-wrapper__title']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='content-published-date']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='content-attribution__content-link content-attribution__content-link--16728575 content-attribution__content-link--contact']/text()",
+
+        }
+
+      ]
+    }
+  }
+}

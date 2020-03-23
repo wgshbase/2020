@@ -1,0 +1,63 @@
+{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsDBPipeline"],
+  "startURL": [ "https://mil.huanqiu.com/world/"],
+  "domain": "mil.huanqiu.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//li[@class='list-item-onepic']/a/@href",
+  "newsCategory":"中文新闻",
+  "isPhantomJs":true,
+  "charset":"GB2312",
+  "src":"环球军事",
+  "dbType":"news_cn",  
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://mil.huanqiu.com/world/?${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_cn",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//section[@data-type='rtext']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//div[@id='content-ad']",
+               			"//div[@id='ad_survey_ad_slot_7000531']"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//div[@class='t-container-title']/h3/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='time']/text()",
+          
+        }
+      ]
+    }
+  }
+}

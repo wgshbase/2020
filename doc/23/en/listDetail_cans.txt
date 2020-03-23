@@ -1,0 +1,77 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.cnas.org/reports"],
+  "domain": "www.cnas.org",
+  "retry": 3,
+  "isGoogleSite": true,
+  "isUseProxy":true,
+  "rootPath": "D:/data/webmagic/",
+  "listHrefXPath":"//main[@id='content']//li/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other",
+  "src": "美国安全中心",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 2,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.cnas.org/reports/p${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en",      
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,     
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//article",
+          "excludeRegionExp": {
+             "xpath":[
+                      "//iframe",
+                      "//img"
+                        ]
+            },
+          "innerFileConfigs": [
+           {
+             "resourceName": "image",
+             "resourceRegionExp": "//img/@data-src | //img/@src",
+             "multi": true,
+           },
+           {
+              "resourceName": "pdf",
+              "resourceRegionExp": "//a[@class='button -solid']/@href",
+              "targetFileName":"//span[@id='pub-header-full-display']",
+              "multi": false,
+            }
+         ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='page-title']/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//div[@class='attribution-block']/p/text()",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//a[@class='url fn n']/text()",
+          
+        },
+        
+      ]
+    }
+  }
+}

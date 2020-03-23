@@ -1,0 +1,76 @@
+{
+  "pageProcessorModel":"listAndDetail",
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.csiro.au/api/sitecore/News/GetNewsByFilter?start=0&count=12&from=&to=&period=All"],
+  "domain": "www.csiro.au",
+  "retry": 3,
+  "rootPath": "D:/AppData/data/store/upload/",
+  "sslm":"oceanEn",
+  "listHrefXPath":"//div[@class='col-1-3']/a/@href",
+  "newsCategory":"澳大利亚",
+  "dbType":"news_other",
+  "src":"CSIRO",
+  "pagingModel": {
+      "startPage": 0,
+      "endPage": 1,
+      "step":12,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.csiro.au/api/sitecore/News/GetNewsByFilter?start=${page}&count=12&from=&to=&period=All&_=1577261205762"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_ocean_en",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//main[@class='section__list']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//iframe",
+               			"//div[@class='hd--grey']",
+               			"//div[@class='call-to-action section section--med']",
+               			"//div[@class='section__list']",
+               			"//ul[@id='news-release--multimedia']",
+               			"//p[@class='summary']",
+               			"//div[@class='section section--med']",
+               			"//div[@class='related-links']",
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//h1[@class='banner__text']/text()",
+
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='banner__text banner__text--small']/text()",
+
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//div[@class='hd--mini hd--mini--sm']/h3[@class='h4']/text()",
+
+        }
+      ]
+    }
+  }
+}

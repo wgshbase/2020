@@ -1,0 +1,81 @@
+﻿{
+  "pageProcessorModel":"listAndDetail", 
+  "pipelines":["ImgPipeline","NewsTranslate2DBPipeline"],
+  "startURL": [ "https://www.space.com/news/"],
+  "domain": "www.space.com",
+  "retry": 3,
+  "rootPath": "D:/data/webmagic2/",
+  "listHrefXPath":"//div[@class='listingResults mixed']/div/a/@href",
+  "newsCategory":"美国新闻",
+  "dbType":"news_other", 
+  "src":"SPACE",
+  "pagingModel": {
+      "startPage": 1,
+      "endPage": 1,
+      "pagingType": "rule",
+      "pageNumRules": "https://www.space.com/news/${page}"
+  },
+  "extractorCfgs": {
+    "News": {
+      "objName": "news_en_zhs",
+      "objXpath": "//html",
+      "fileNameRules":["title"],
+      "multi": false,   
+      "fieldList": [
+        {
+          "sourceType": "newstext",
+          "fieldExtractorType": "html",
+          "fieldName": "content",
+          "fieldExtractorExp": "//article[@class='news-article ']",
+          "excludeRegionExp": {
+               "xpath":[
+               			"//article[@class='news-article ']/header",
+               			"//div[@class='promo-standard promo--hidden noskim']",
+               			"//iframe",
+               			"//footer",
+               			"//blockquote",
+               			"//video",
+               			"//script",
+               			"//nav[@class='pagination-gallery-sequential top']",
+               			"//li[@class='thumb']",
+               			"//li[@class='thumb ']",
+               			"//div[@class='partner-banner']",
+               			"//div[@class='box pagination internal expand less-space reveal']",
+               			"//div[@class='text-copy']",
+               			"//div[@class='box article pagination internal current-prev-next navigation-sequential']",
+               			"//ul"
+               			]
+          },
+          "innerFileConfigs": [
+            {
+              "resourceName": "image",
+              "resourceRegionExp": "//img/@data-src | //img/@src",
+              "multi": true,
+            }
+          ]
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "title",
+          "fieldExtractorExp": "//header/h1/text()",
+          
+        },
+        {
+          "sourceType": "datetext",
+          "fieldExtractorType": "html",
+          "fieldName": "pubDate",
+          "fieldExtractorExp": "//p[@class='byline']/time/@datetime",
+          
+        },
+        {
+          "sourceType": "rawtext",
+          "fieldExtractorType": "html",
+          "fieldName": "author",
+          "fieldExtractorExp": "//span[@itemprop='name']/text()",
+          
+        }
+      ]
+    }
+  }
+}
